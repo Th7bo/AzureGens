@@ -1,0 +1,57 @@
+on join:
+	if {playtime::%player's uuid%} is not set:
+		set {playtime::%player's uuid%} to 0
+	wait 7 ticks
+	toggle scoreboard of player on
+	while player is online:
+		add 1 to {playtime::%player's uuid%}
+		set {_maxXp} to ({level::%player's uuid%} * 100) * (1.34 + ({level::%player's uuid%} * 0.1))
+		set title of player's scoreboard to "&3&lAzureGens"
+		set line 14 of player's scoreboard to "&7"
+		set line 13 of player's scoreboard to " &3&lPLAYER"
+		#set line 12 of player's scoreboard to " &7- &bIGN: &f%player%"
+		#set line 11 of player's scoreboard to " &7- &bRank: %player's prefix%"
+		set line 10 of player's scoreboard to " &7- &bCoins: &6⛁&e%regex({coins::%player's uuid%})%"
+		set line 9 of player's scoreboard to " &7- &bTokens: &5◎&d%regex({tokens::%player's uuid%})%"
+		set line 8 of player's scoreboard to " &7- &bGens: &f%{GenSlots::%uuid of player%::Used}% &7/ &f%{GenSlots::%uuid of player%::Max}%"
+		#set line 7 of player's scoreboard to " &7- &bLevel: &a%{level::%player's uuid%}% &a&l(&a%floor({xp::%player's uuid%})%&a/&a%floor({_maxXp})%&a&l)"
+		set line 6 of player's scoreboard to "&f"
+		set line 5 of player's scoreboard to " &3&lSERVER"
+		set line 4 of player's scoreboard to " &7- &bTPS: &f%tps from last minute%"
+		set line 3 of player's scoreboard to " &7- &bOnline: &f%size of all players%"
+		set line 1 of player's scoreboard to "&7"
+		wait 1 second
+
+every 5 seconds:
+	loop all players:
+		set {_maxXp} to ({level::%loop-player's uuid%} * 100) * (1.34 + ({level::%loop-player's uuid%} * 0.1))
+		set level progress of the loop-player to {xp::%loop-player's uuid%} / {_maxXp}
+		set loop-player's level to {level::%loop-player's uuid%}
+
+on join:
+	if {level::%player's uuid%} is not set:
+		set {level::%player's uuid%} to 1
+		set {xp::%player's uuid%} to 0
+
+function addXP(p: player,a: number):
+	set {_pu} to {_p}'s uuid
+	set {_maxXp} to ({level::%{_pu}%} * 100) * (1.34 + ({level::%{_pu}%} * 0.1))
+	if {xp::%{_pu}%} + {_a} < {_maxXp}:
+		add {_a} to {xp::%{_pu}%}
+	else:
+		add 1 to {level::%{_pu}%}
+		set {xp::%{_pu}%} to 0
+		if {level::%{_pu}%} is divisible by 5:
+			add 1 to {tokens::%{_pu}%}
+		if {level::%{_pu}%} is divisible by 10:
+			add 1 to {tokens::%{_pu}%}
+		if {level::%{_pu}%} is divisible by 5:
+			if {level::%{_pu}%} is divisible by 10:
+				send "&3&lLevel Up &3Your now level %{level::%{_pu}%}% &5◎&d+2" to {_p}
+			else:
+				send "&3&lLevel Up &3Your now level %{level::%{_pu}%}% &5◎&d+1" to {_p}
+		else:
+			send "&3&lLevel Up &3Your now level %{level::%{_pu}%}%" to {_p}
+		wait 1 second
+		send title "&3&lLevel Up" with subtitle "&fYour now level %{level::%{_pu}%}%" to {_p}
+		play sound "ui.toast.challenge_complete" with pitch 0.7 to {_p}

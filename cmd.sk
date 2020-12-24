@@ -1,0 +1,333 @@
+command /resetplayer <offline player>:
+	permission: *
+	trigger:
+		set {_pu} to arg-1's uuid
+		delete {coins::%{_pu}%}
+		delete {tokens::%{_pu}%}
+		delete {xp::%{_pu}%}
+		delete {level::%{_pu}%}
+		delete {placegens4::%{_pu}%}
+		delete {maxgens4::%{_pu}%}
+		delete {start::%{_pu}%}
+		delete {joinfirst::%{_pu}%}
+
+command /pgens <offline player>:
+	permission: *
+	trigger:
+		set {_pu} to arg-1's uuid
+		send "%{GenSlots::%{_pu}%::Used}% / %{GenSlots::%{_pu}%::Max}% | %{GenSlots::%{_pu}%::BuyMax}%"
+
+command /playtime <offline player>:
+	trigger:
+		set {_pu} to arg-1's uuid
+		set {_time} to "%{playtime::%{_pu}%}% seconds" parsed as timespan
+		send "&f"
+		send "&3&LAzure Gens &a%arg-1%&a's play time is %formatseconds({_time})%"
+		send "&f"
+
+command /fixgens <text> <offline player>:
+	permission: *
+	trigger:
+		set {_pu} to arg-2's uuid
+		if arg-1 is "add":
+			add 1 to {GenSlots::%{_pu}%::Used}
+		if arg-1 is "remove":
+			remove 1 from {GenSlots::%{_pu}%::Used}
+		if arg-1 is "addMax":
+			add 1 to {GenSlots::%{_pu}%::Max}
+		if arg-1 is "removeMax":
+			remove 1 from {GenSlots::%{_pu}%::Max}
+			
+command /addgens <offline player> <number>:
+	permission: *
+	trigger:
+		set {_pu} to arg-1's uuid
+		add arg-2 to {GenSlots::%{_pu}%::BuyMax}
+		add arg-2 to {GenSlots::%{_pu}%::Max}
+
+command /tokenexchange:
+    permission: op
+    trigger:
+        open virtual chest inventory with size 3 named "&6&lToken Exchange" to player
+        format(player,27)
+        format gui slot 14 of player with sunflower named "&a&lSell Tokens" with lore "&eToken Stock: %{tokenstock}%" and "&7Sell Price: 5k Coins" and "&7" to run:
+            if {tokens::%player's uuid%} is above 0:
+                add 5000 to {coins::%player's uuid%}
+                add 1 to {tokenstock}
+                remove 1 from {tokens::%player's uuid%}
+                send "&3&lAzure Exchange &fExchange Successful!"
+                make player execute command "/tokenexchange"
+            else:
+                send "&3&lAzure Exchange &fYou do not have enough Tokens!"   
+        format gui slot 12 of player with sunflower named "&a&lBuy Tokens" with lore "&eToken Stock: %{tokenstock}%" and "&7Buy Price: 6k Coins" and "&7" to run:
+        set {_1} to {tokenstock}/100
+        set {_price} to 6000 * {_1}
+        if {tokenstock} is above 0:
+            if {coins::%player's uuid%} is above {_price}:
+                remove {_price} from {coins::%player's uuid%}
+                add 1 to {tokens::%player's uuid%}
+                remove 1 from {tokenstock}
+                send "&3&lAzure Exchange &fExchange successful!"
+                make player execute command "/tokenexchange"
+            else:
+                send "&3&lAzure Exchange &fYou do not have enough Money!"    
+        else:
+            send "&3&lAzure Exchange &fThere are not enough Tokens in the economy right now, come again later!"
+
+command /pl:
+	trigger:
+		send "&fPlugins (4): &aPlayerServer, First_Day_out_the_closet, Dick_mode, ItemClear"
+
+command /plugins:
+	trigger:
+		send "&fPlugins (4): &aPlayerServer, First_Day_out_the_closet, Dick_mode, ItemClear"
+
+command /discord:
+	trigger:
+		send "&8------------"
+		send "&8| &3&l<link:https://discord.gg/MJmGUX4hvW>Join Here &8|"
+		send "&8------------"
+
+every 3 minutes:
+	broadcast "&3&LAzure Gens &fEntity Clear in 30 seconds."
+	wait 30 seconds
+	broadcast "&3&LAzure Gens&f Entities cleared!"
+	kill all dropped items
+	kill all armor stands
+	kill all boats
+	kill all minecarts
+	kill all monsters
+
+command /clearlag:
+	permission: op
+	trigger:
+		kill all dropped items
+
+on right click:
+	if player's tool is boat:
+		cancel event
+
+every 1.5 minute:
+	set {_r} to random integer between 1 and 5
+	if {_r} is 1:
+		broadcast "&f"
+		broadcast "&f"
+		broadcast "   &3&LDiscord"
+		broadcast " &bJoin our discord with /discord"
+		broadcast "&f"
+		broadcast "&f"
+	if {_r} is 2:
+		broadcast "&f"
+		broadcast "&f"
+		broadcast "   &5&LTokens"
+		broadcast " &dBuy tokens at /buy."
+		broadcast "&f"
+		broadcast "&f"
+	if {_r} is 3:
+		broadcast "&f"
+		broadcast "&f"
+		broadcast "   &6&LRanks"
+		broadcast " &eBuy ranks at /ranks, you need tokens to buy ranks. To buy tokens use /buy."
+		broadcast "&f"
+		broadcast "&f"
+	if {_r} is 4:
+		broadcast "&f"
+		broadcast "&f"
+		broadcast "   &a&LInfo"
+		broadcast " &aIf you have any questions do /help it solves most problems but not my parents divorce :(."
+		broadcast "&f"
+		broadcast "&f"
+	if {_r} is 5:
+		broadcast "&f"
+		broadcast "&f"
+		broadcast "   &9&LDiscord"
+		broadcast " &bTo get a free rank with +5 gen slots. Do &9&l/link&b."
+		broadcast "&f"
+		broadcast "&f"
+
+command /cointop:
+	trigger:
+		loop {coins::*}:
+			add 1 to {_size}
+			if {_low.to.high.list::%loop-value%} is not set:
+				set {_low.to.high.list::%loop-value%} to loop-index	
+			else:
+				set {_n} to 0
+				loop {_size} times:
+					set {_n} to {_n}+1
+					{_low.to.high.list::%loop-value-1%.%{_n}%} is not set
+					set {_low.to.high.list::%loop-value-1%.%{_n}%} to loop-index
+					stop loop
+		wait 1 tick
+		set {_n} to size of {_low.to.high.list::*}
+		loop {_low.to.high.list::*}:
+			set {_high.to.low.list::%{_n}%} to loop-value
+			set {_n} to {_n}-1
+		set {_i} to 0
+		send "&8----&e&LCoin Top&8----"
+		loop {_high.to.low.list::*}:
+			set {_player} to "%loop-value%" parsed as offlineplayer
+			if "%{_player}%" is not "<none>":
+				add 1 to {_topnumber}
+				set {_pu} to {_player}'s uuid
+				send "&7%{_topnumber}% - &e%{_player}% &8| &6⛁&e%regex({coins::%{_pu}%})%"
+				add 1 to {_i}
+				if {_topnumber} > 10: #this is top 10 you can change it
+					stop
+					send "&8------------------"
+command /leveltop:
+	trigger:
+		loop {level::*}:
+			add 1 to {_size}
+			if {_low.to.high.list::%loop-value%} is not set:
+				set {_low.to.high.list::%loop-value%} to loop-index	
+			else:
+				set {_n} to 0
+				loop {_size} times:
+					set {_n} to {_n}+1
+					{_low.to.high.list::%loop-value-1%.%{_n}%} is not set
+					set {_low.to.high.list::%loop-value-1%.%{_n}%} to loop-index
+					stop loop
+		wait 1 tick
+		set {_n} to size of {_low.to.high.list::*}
+		loop {_low.to.high.list::*}:
+			set {_high.to.low.list::%{_n}%} to loop-value
+			set {_n} to {_n}-1
+		set {_i} to 0
+		send "&8----&a&Level Top&8----"
+		loop {_high.to.low.list::*}:
+			set {_player} to "%loop-value%" parsed as offlineplayer
+			if "%{_player}%" is not "<none>":
+				set {_pu} to {_player}'s uuid
+				add 1 to {_topnumber}
+				send "&7%{_topnumber}% - &a%{_player}% &8| &7&l(&a%{level::%{_pu}%}%&7&l) "
+				add 1 to {_i}
+				if {_topnumber} > 10:
+					stop
+					send "&8------------------"				
+
+command /help:
+	trigger:
+		wait 1 tick
+		set {openmenu::%player%} to true
+		open virtual chest inventory with size 3 named "Help" to player
+		format(player, 27)
+		format gui slot 13 of player with Iron Block named "&3&lAzure Gens" with lore "&f", "&7To get your first gen use /start.", "&7To upgrade a gen right click it.", "&7To break it just simply break it." and "&f" 
+		format gui slot 9 of player with Emerald named "&a&lMoney" with lore "&f", "&7There are 2 types of currency's.", "&f", "&7There are tokens which are used for", "&7Special upgrades and can be bought /buy.", "&f", "&7There are coins which are used for", "&7upgrading and buying materials.", "&f", "&7There are 2 currency commands", "&71. Withdraw. can withdraw coins or tokens into items", "&72. Pay. Pays people with coins" and "&f" 
+		format gui slot 11 of player with Iron Ingot named "&e&lShop" with lore "&f", "&7You can sell the materials you get from gens.", "&f", "&7You can buy materials,building blocks,", "&7tools and gens from /shop." and "&f" 
+		format gui slot 15 of player with experience bottle named "&a&lLeveling" with lore "&f", "&7Leveling Is basically useless rn.", "&f", "&7Except with leveling you can get tokens.", "&71 token every 5 levels and 2 tokens every 10." and "&f" 
+		format gui slot 17 of player with dirt named "&3&lAzure Gens" with lore "&f", "&7Left click here to", "&7Open all gens." and "&f" to run player command "/gens"
+
+
+		
+command /rules:
+	trigger:
+		send "&8---&c&lRules&8---"
+		send "&81. &4No hacks &7[&c1 day ban&7]"
+		send "&82. &4Abusing Bugs and not reporting &7[&c30 day ban and reset&7]"
+		send "&83. &4Abusing Bugs and report Bug &7[&cReset&7]"
+		send "&84. &4Spam &7[&cJust shut yo mouth&7]"
+		send "&85. &4Alting &7[&cSeason Ban&7]"
+		send "&86. &4No Abusive, alt or plot boosting (No giving players max items when they join) &7[&c24 hour ban&7]"
+		send "&8---------&8---"
+
+on rightclick on anvil:
+	cancel event
+
+command /fly:
+	trigger:
+		player has permission "command.fly"
+		if player's fly mode is true:
+			set player's fly mode to false
+			send "&3&lAzure Gens &cFly disabled!"
+			play sound "block.note_block.xylophone"
+		else if player's fly mode is false:
+			set player's fly mode to true
+			send "&3&lAzure Gens &aFly enabled!"
+			play sound "block.note_block.xylophone"
+command /nick [<text>]:
+	trigger:
+		uncolored arg-1's length <= 20
+		player has permission "command.nick"
+		if arg-1 is set:
+			if player has permission "colored.nick":
+				set player's displayname to colored arg-1
+				send "&3&lAzure Gens &eNick set to %colored arg-1%"
+				play sound "block.note_block.xylophone"
+				set {nick::%player's uuid%} to arg-1
+			else:
+				set player's displayname to arg-1
+				send "&3&lAzure Gens &eNick set to %arg-1%"
+				play sound "block.note_block.xylophone"				
+				set {nick::%player's uuid%} to arg-1
+		else:
+			send "&3&lAzure Gens &c/nick <text>"
+			play sound "block.note_block.didgeridoo"
+
+on join:
+	if player has permission "colored.nick":
+		set player's displayname to colored {nick::%player's uuid%}
+	else:
+		set player's displayname to uncolored {nick::%player's uuid%}
+
+command /flyspeed [<integer>]:
+	trigger:
+		player has permission "command.flyspeed"
+		if arg-1 is between 1 and 10:
+			set {_n} to arg-1
+			set {_n} to {_n} * 0.1
+			set player's flight speed to {_n}
+			send "&3&lAzure Gens &aFly Speed set to %arg-1%"
+			play sound "block.note_block.xylophone"
+		else:
+			send "&3&lAzure Gens &c/flyspeed <1 - 10>"
+			play sound "block.note_block.didgeridoo"
+every 1 seconds:
+	loop all players:
+		if {speed::%loop-player's uuid%} is set:
+			apply speed 2 to loop-player for 1 seconds
+		if {haste::%loop-player's uuid%} is set:
+			apply haste 2 to loop-player for 1 seconds
+		if {jumpboost::%loop-player's uuid%} is set:
+			apply jump boost 1 to loop-player for 1 seconds
+command /potions:
+	trigger:
+		player has permission "command.potions"
+		open virtual chest inventory with size 3 named "Potions" to player
+		format(player,27)
+		if {speed::%player's uuid%} is set:
+			set {_status} to "&a&lACTIVATED"
+		else:
+			set {_status} to "&c&lDEACTIVATED"
+		format gui slot 10 of player with sugar named "&bSpeed" with lore "&f", "&7Status: %{_status}%", "&f" and "&7Left click to toggle" to run:
+			if {speed::%player's uuid%} is set:
+				delete {speed::%player's uuid%}
+			else:
+				set {speed::%player's uuid%} to true
+			make player execute "/potions"
+		if player has permission "command.potions.more":
+			if {haste::%player's uuid%} is set:
+				set {_status} to "&a&lACTIVATED"
+			else:
+				set {_status} to "&c&lDEACTIVATED"
+			format gui slot 13 of player with gold pickaxe with no nbt named "&6Haste" with lore "&f", "&7Status: %{_status}%", "&f" and "&7Left click to toggle" to run:
+				if {haste::%player's uuid%} is set:
+					delete {haste::%player's uuid%}
+				else:
+					set {haste::%player's uuid%} to true
+				make player execute "/potions"
+			if {jumpboost::%player's uuid%} is set:
+				set {_status} to "&a&lACTIVATED"
+			else:
+				set {_status} to "&c&lDEACTIVATED"
+			format gui slot 16 of player with feather with no nbt named "&aJump Boost" with lore "&f", "&7Status: %{_status}%", "&f" and "&7Left click to toggle" to run:
+				if {jumpboost::%player's uuid%} is set:
+					delete {jumpboost::%player's uuid%}
+				else:
+					set {jumpboost::%player's uuid%} to true
+				make player execute "/potions"
+		else:
+			format gui slot 13 of player with gold pickaxe with no nbt named "&6Haste" with lore "&f", "&c&lLOCKED", "&cMust Buy Premium" and "&f"
+			format gui slot 16 of player with feather with no nbt named "&aJump Boost" with lore "&f", "&c&lLOCKED", "&cMust Buy Premium" and "&f"
+
+			

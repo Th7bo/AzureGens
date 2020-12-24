@@ -1,0 +1,49 @@
+function format(p: player, n: number):
+	loop {_n} times:
+		set {_slot} to loop-number - 1
+		format gui slot {_slot} of {_p} with gray stained glass pane named "&f"
+
+function formatair(p: player, n: number):
+	loop {_n} times:
+		set {_slot} to loop-number - 1
+		format gui slot {_slot} of {_p} with air
+
+
+function getItem(i: text) :: item: 
+	return {%{_i}%}
+
+function setPos(p: player,text: text):
+	set {%{_text}%} to {_p}'s position
+
+function regex(n: object) :: text:
+    if "%{_n}%" contains ".":
+        set {_s::*} to split "%{_n}%" at "."
+        set {_n} to "%a({_s::1})%.%last 2 characters of {_s::2}%"
+        return "%{_n}%"
+    else:
+        set {_n} to a("%{_n}%")
+        return "%{_n} ? 0%"
+
+function a(b: text) :: text:
+    if length of {_b} > 3:
+        return "%a(first length of {_b} - 3 characters of {_b})%,%last 3 characters of {_b}%"
+    return {_b}
+
+function formatseconds(a: timespan) :: string:
+	set {_i} to "%{_a}%"
+	set {_i::*} to {_i} split at " and "
+	replace all " seconds" or " second" with " secs" in {_i::1}
+	replace all " minutes" or " minute" with " mins" in {_i::1}
+	replace all " hours" or " hour" with " h" in {_i::1}
+	replace all " days" or " day" with " d" in {_i::1}
+	set {_i2::*} to {_i::1} split at "."
+	if {_i2::2} contains "secs":
+		return "%{_i2::1}% secs"
+	else if {_i2::2} contains "mins":
+		return "%{_i2::1}% mins"
+	else if {_i2::2} contains "h":
+		return "%{_i2::1}% h"
+	else if {_i2::2} contains "d":
+		return "%{_i2::1}% d"
+	else:
+		return "%{_i::1}%"

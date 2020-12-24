@@ -1,0 +1,121 @@
+function buy(p: player, c: number, i: item):
+	set {_pu} to {_p}'s uuid
+	if {coins::%{_pu}%} >= {_c}:
+		give {_i} to {_p}
+		remove {_c} from {coins::%{_pu}%}
+		send "&3&LAzure Shop&a Successful Purchase" to {_p}
+		play sound "block.note_block.bell" to {_p}
+	else:
+		play sound "block.note_block.didgeridoo" to {_p}
+		send "&3&lAzure Shop&c Insufficient Funds" to {_p}
+		
+
+command /shop:
+	trigger:
+		wait 1 tick
+		set {openmenu::%player%} to true
+		open virtual chest inventory with size 4 named "Azure Shop" to player
+		formatair(player, 36)
+		format gui slot 31 of player with barrier named "&c&lGo Back" to run function menu(player)
+		format gui slot 12 of player with dirt named "&3&LAzure Generators" with lore "&f", "&7Left click to open", "&7The Azure Gen Shop" and "&f" to run function genshop(player)
+		format gui slot 14 of player with hopper named "&e&lMisc" with lore "&f", "&7Left click to open", "&7The Misc Shop" and "&f" to run function miscshop(player)
+		format gui slot 16 of player with diamond pickaxe with no nbt named "&e&lTools" with lore "&f", "&7Left click to open", "&7The Tool Shop" and "&f" to run function toolshop(player)
+		format gui slot 10 of player with brick block named "&e&lBlocks" with lore "&f", "&7Left click to open", "&7The Block Shop" and "&f" to run player command "/blockshop"
+
+function toolshop(p: player):
+	wait 1 tick
+	set {openmenu::%{_p}%} to true
+	set {_pu} to {_p}'s uuid
+	open virtual chest inventory with size 6 named "Tool Shop" to {_p}
+	formatair({_p}, 54)
+	format gui slot 49 of {_p} with barrier named "&c&lGo Back" to run {_p} command "/shop"
+	format gui slot 10 of {_p} with wood pickaxe with no nbt named "&eWooden Tools" with lore "&f", "&6&lPrice:", "&6⛁&e5.75" and "&f" to run:
+		if {coins::%{_pu}%} >= 5.75:
+			remove 5.75 from {coins::%{_pu}%}
+			send "&3&LAzure Shop&a Successful Purchase" to {_p}
+			play sound "block.note_block.bell" to {_p}
+			give {_p} wood pickaxe
+			give {_p} wood axe
+			give {_p} wood shovel
+		else:
+			play sound "block.note_block.didgeridoo" to {_p}
+			send "&3&lAzure Shop&c Insufficient Funds" to {_p}
+	format gui slot 13 of {_p} with stone pickaxe with no nbt named "&eStone Tools" with lore "&f", "&6&lPrice:", "&6⛁&e10" and "&f" to run:
+		if {coins::%{_pu}%} >= 10:
+			remove 10 from {coins::%{_pu}%}
+			send "&3&LAzure Shop&a Successful Purchase" to {_p}
+			play sound "block.note_block.bell" to {_p}
+			give {_p} stone pickaxe
+			give {_p} stone axe
+			give {_p} stone shovel
+		else:
+			play sound "block.note_block.didgeridoo" to {_p}
+			send "&3&lAzure Shop&c Insufficient Funds" to {_p}
+	format gui slot 16 of {_p} with iron pickaxe with no nbt named "&eIron Tools" with lore "&f", "&6&lPrice:", "&6⛁&e35" and "&f" to run:
+		if {coins::%{_pu}%} >= 35:
+			remove 35 from {coins::%{_pu}%}
+			send "&3&LAzure Shop&a Successful Purchase" to {_p}
+			play sound "block.note_block.bell" to {_p}
+			give {_p} iron pickaxe
+			give {_p} iron axe
+			give {_p} iron shovel
+		else:
+			play sound "block.note_block.didgeridoo" to {_p}
+			send "&3&lAzure Shop&c Insufficient Funds" to {_p}
+	format gui slot 28 of {_p} with diamond pickaxe with no nbt named "&eDiamond Tools" with lore "&f", "&6&lPrice:", "&6⛁&e75" and "&f" to run:
+		if {coins::%{_pu}%} >= 75:
+			remove 75 from {coins::%{_pu}%}
+			send "&3&LAzure Shop&a Successful Purchase" to {_p}
+			play sound "block.note_block.bell" to {_p}
+			give {_p} diamond pickaxe
+			give {_p} diamond axe
+			give {_p} diamond shovel
+		else:
+			play sound "block.note_block.didgeridoo" to {_p}
+			send "&3&lAzure Shop&c Insufficient Funds" to {_p}
+	format gui slot 31 of {_p} with netherite pickaxe with no nbt named "&eNetherite Tools" with lore "&f", "&6&lPrice:", "&6⛁&e150" and "&f" to run:
+		if {coins::%{_pu}%} >= 150:
+			remove 150 from {coins::%{_pu}%}
+			send "&3&LAzure Shop&a Successful Purchase" to {_p}
+			play sound "block.note_block.bell" to {_p}
+			give {_p} netherite pickaxe
+			give {_p} netherite axe
+			give {_p} netherite shovel
+		else:
+			play sound "block.note_block.didgeridoo" to {_p}
+			send "&3&lAzure Shop&c Insufficient Funds" to {_p}
+	format gui slot 34 of {_p} with shiny netherite pickaxe with no nbt named "&eEnchanted Netherite Tools" with lore "&f", "&6&lPrice:", "&6⛁&e750" and "&f" to run:
+		if {coins::%{_pu}%} >= 750:
+			remove 750 from {coins::%{_pu}%}
+			send "&3&LAzure Shop&a Successful Purchase" to {_p}
+			play sound "block.note_block.bell" to {_p}
+			give {_p} netherite pickaxe of efficiency 5 and unbreaking 10 
+			give {_p} netherite axe of efficiency 5 and unbreaking 10 
+			give {_p} netherite shovel of efficiency 5 and unbreaking 10
+		else:
+			play sound "block.note_block.didgeridoo" to {_p}
+			send "&3&lAzure Shop&c Insufficient Funds" to {_p}
+
+function genshop(p: player):
+	wait 1 tick
+	set {openmenu::%{_p}%} to true
+	open virtual chest inventory with size 4 named "Azure Gen Shop" to {_p}
+	loop 36 times:
+		set {_n} to loop-number - 1
+		format gui slot {_n} of {_p} with purple stained glass pane named "&f"
+	format gui slot 31 of {_p} with barrier named "&c&lGo Back" to run {_p} command "/shop"
+	format gui slot 13 of {_p} with hay bale named "&3&lAzure Gen" with lore "&f", "&6&lPrice:", "&6⛁&e1" and "&f" to run function buy({_p}, 1, {Gens::Items::Wheat})
+
+function miscshop(p: player):
+	wait 1 tick
+	set {openmenu::%{_p}%} to true
+	open virtual chest inventory with size 4 named "Misc Shop" to {_p}
+	formatair({_p}, 36)
+	format gui slot 31 of {_p} with barrier named "&c&lGo Back" to run {_p} command "/shop"
+	format gui slot 11 of {_p} with water bucket named "&eWater Bucket" with lore "&f", "&6&lPrice:", "&6⛁&e5" and "&f" to run function buy({_p}, 5, water bucket)
+	format gui slot 12 of {_p} with 16 hoppers  named "&7x16 &eHopper" with lore "&f", "&6&lPrice:", "&6⛁&e32" and "&f" to run function buy({_p}, 32, 16 hoppers)
+	format gui slot 10 of {_p} with 16 chests named "&7x16 &eChest" with lore "&f", "&6&lPrice:", "&6⛁&e12" and "&f" to run function buy({_p}, 12, 16 chests)
+	format gui slot 13 of {_p} with 4 ice named "&7x4 &eIce" with lore "&f", "&6&lPrice:", "&6⛁&e12" and "&f" to run function buy({_p}, 12, 4 Ice)
+	format gui slot 14 of {_p} with 4 packed ice named "&7x4 &ePacked Ice" with lore "&f", "&6&lPrice:", "&6⛁&e20" and "&f" to run function buy({_p}, 20, 4 Packed Ice)
+	format gui slot 15 of {_p} with 4 blue ice named "&7x4 &eBlue Ice" with lore "&f", "&6&lPrice:", "&6⛁&e30" and "&f" to run function buy({_p}, 30, 4 Blue Ice)
+

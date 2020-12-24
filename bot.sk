@@ -1,0 +1,56 @@
+on load:
+	login to "Nzc0NDk4ODk5NzUzODI4MzYy.X6YqTw.0Oank_DTXqGpVPK3ZBJxOTjcMPg" with the name "AzureBot"
+
+on chat:
+	message does not contain "@"
+	wait 5 ticks
+	event is not canceled
+	send "**%uncolored player's prefix% %player%** : `%message%`" to channel with id "776851635439140875" with "AzureBot"
+
+every 20 seconds in "world":
+	set game of "AzureBot" to "With %size of all players%/75 Players!"
+
+command /updatebotstatus:
+	trigger:
+		set game of "AzureBot" to "With %size of all players%/75 Players!"
+
+discord command -link <integer>:
+	trigger:
+		if arg-1 is set:
+			set {_n} to "%arg-1%" parsed as integer
+			if {ids::*} contain arg-1:
+				set {_pu} to {idplayer::%arg-1%}'s uuid
+				set {playerdiscord::%{_pu}%} to discord id of event-user
+				set {discordplayer::%discord id of event-user%} to {idplayer::%arg-1%}
+				reply with "Discord Linked with %{idplayer::%arg-1%}%"
+				send "&aDiscord Linked" to {idplayer::%arg-1%}
+				remove arg-1 from {ids::*}
+				add 5 to {GenSlots::%{_pu}%::Max}
+				add 5 to {GenSlots::%{_pu}%::BuyMax}
+				if {idplayer::%arg-1%}'s group is "default":
+					execute console command "/pex user %{idplayer::%arg-1%}% group set discord"
+			else:
+				reply with "Invalid Link Code"
+		else:
+			reply with "Must set Link Code"
+
+
+command /link:
+	trigger:	
+		if {playerdiscord::%player's uuid%} is not set:
+			set {_r} to random integer between 1000 and 9999
+			while {ids::*} contains {_r}:
+				set {_r} to random integer between 1000 and 9999
+			add {_r} to {ids::*}
+			set {idplayer::%{_r}%} to player
+			send "&f"
+			send "&f"
+			send "    &9&lDiscord"
+			send "  &aYour linking code is %{_r}%&a use -link %{_r}%&a in the discord to link your account"
+			send "&f"
+			send "&f"
+		else:
+			send "&cYour account is already linked"
+		
+		
+

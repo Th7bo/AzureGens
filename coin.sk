@@ -1,0 +1,45 @@
+on join:
+	if {coins::%player's uuid%} is not set:
+		set {coins::%player's uuid%} to 0
+
+command /addmoney <offline player> <number>:
+	permission: *
+	trigger:
+		set {_pu} to arg-1's uuid
+		add arg-2 to {coins::%{_pu}%}
+
+command /pay [<player>] [<number>]:
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				if {coins::%player's uuid%} >= arg-2:
+					if arg-2 > 0:
+						set {_pu} to arg-1's uuid
+						play sound "block.note_block.bell" to arg-1
+						play sound "block.note_block.bell" to player
+						send "&3&lAzure Gens &aYou payed %arg-1%&a &6⛁&e%arg-2%" to player
+						send "&3&lAzure Gens &a%player%&a payed you &6⛁&e%arg-2%" to arg-1
+						remove arg-2 from {coins::%player's uuid%}
+						add arg-2 to {coins::%{_pu}%}
+					else:
+						play sound "block.note_block.didgeridoo"
+						send "&3&lAzure Gens &cCan't be zero"
+				else:
+					play sound "block.note_block.didgeridoo"
+					send "&3&lAzure Gens &cYou don't have that money"
+			else:
+				play sound "block.note_block.didgeridoo"
+				send "&3&lAzure Gens &c/pay <player> <number>"
+		else:
+			play sound "block.note_block.didgeridoo"
+			send "&3&lAzure Gens &c/pay <player> <number>"
+
+command /bal [<offline player>]:
+	trigger:
+		if arg-1 is set:
+			set {_pu} to arg-1's uuid
+			send "&3&LAzure Gens &e%arg-1%&e's Balance is &6⛁&e%{coins::%{_pu}%}%"
+		else:
+			play sound "block.note_block.didgeridoo"
+			send "&3&lAzure Gens &c/bal <player>"		
+			

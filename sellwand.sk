@@ -1,0 +1,24 @@
+command /sellwand <number>:
+	permission: *
+	trigger:
+		set {_i} to shiny blaze rod named "&eSell Wand (&ex%arg-1%)" with lore "&7Right Click a container to sell."
+		add "{Sellwand:%arg-1%F}" to nbt of {_i}
+		give player {_i}
+ 
+on rightclick:
+	player is not sneaking
+	clicked block's inventory is set
+	if tag "Sellwand" of nbt of player's tool is set:
+		loop clicked block's inventory:
+			set {_multi} to tag "Sellwand" of nbt of player's tool
+			set {_item} to 1 of loop-value
+			set {_itema} to item amount of loop-value
+			if {sell::%{_item}%} is set:
+				add ({sell::%{_item}%} * {_itema}) * {_multi} to {coins::%player's uuid%}
+				add ({sell::%{_item}%} * {_itema}) * {_multi} to {_total}
+				addXP(player, ({sell::%{_item}%} * {_itema}) * 75)
+				remove loop-value from clicked block's inventory
+		send "&3&lAzure Gens &aYou Earned %{_total}%&e with a sell wand multiplier of x%{_multi}%"
+		send title "&a&lSell" with subtitle "&eEarned %{_total}%" for 0.5 seconds
+		play sound "block.note_block.bell"
+		cancel event

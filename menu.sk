@@ -1,0 +1,94 @@
+on load:
+	set {menu} to cyan dye named "&3&lAzure Menu" with lore "&f", "&7Right click to open", "&7the Azure Menu" and "&f"
+	add "{menu:1b}" to nbt of {menu}
+
+on join:
+	set slot 8 of player to {menu}
+
+on inventory click:
+	if tag "menu" of nbt of clicked item is set:
+		cancel event
+		menu(player)
+
+on right click:
+	if tag "menu" of nbt of player's tool is set:
+		{openmenu::%player%} is not true
+		cancel event
+		menu(player)
+
+on drop:
+	if tag "menu" of nbt of event-item is set:
+		{openmenu::%player%} is not true
+		cancel event
+		menu(player)
+
+on left click:
+	if tag "menu" of nbt of player's tool is set:
+		{openmenu::%player%} is not true
+		cancel event
+		menu(player)
+
+
+
+
+function menu(p: player):
+	wait 1 tick
+	set {_skull} to skull of {_p}
+	set {_pu} to {_p}'s uuid
+	set {openmenu::%{_p}%} to true
+	open virtual chest inventory with size 3 named "Azure Menu" to {_p}
+	format({_p}, 27)
+	set {_maxXp} to ({level::%{_pu}%} * 100) * (1.34 + ({level::%{_pu}%} * 0.1))
+	set {_time} to "%{playtime::%{_pu}%}% seconds" parsed as timespan
+	format gui slot 4 of {_p} with {_skull} named "&e&lProfile" with lore "&f", "&3Level: &a&a%{level::%{_pu}%}% &a&l(&a%floor({xp::%{_pu}%})%&a/&a%floor({_maxXp})%&a&l)", "&3Playtime: &f%formatseconds({_time})%" and "&f"
+	format gui slot 13 of {_p} with chest named "&3&LAzure Shop" with lore "&f", "&7Left click to open", "&7The Azure Shop" and "&f" to run {_p} command "/shop"
+	format gui slot 14 of {_p} with lime dye named "&a&lSell" with lore "&f", "&7Left click to open", "&7The Shop" and "&f" to run {_p} command "/sell"
+	#format gui slot 12 of {_p} with paper named "&e&lAchievements" with lore "&f", "&7Left click to open", "&7Achievements" and "&f" to run {_p} command "/Achievements"
+	format gui slot 22 of {_p} with emerald named "&d&lToken Shop" with lore "&f", "&7Left click to open", "&7The Token Shop" and "&f" to run {_p} command "/tokenshop"
+	format gui slot 12 of {_p} with ender pearl named "&3&LWarps" with lore "&f", "&7Left click to open", "&7The Warp Menu" and "&f" to run function warps({_p})
+	#format gui slot 15 of {_p} with feather named "&aPrestige" with lore "&f", "&7Left click to open", "&7The Prestige Menu" and "&f" to run {_p} command "/prestige"
+	format gui slot 26 of {_p} with book and quill named "&eHelp"  with lore "&f", "&7Left click to open", "&7The Help Menu" and "&f" to run {_p} command "/help"
+	format gui slot 11 of {_p} with experience bottle named "&a&LSkills" with lore "&f", "&7Left click to open", "&7The Skills Menu" and "&f" to run {_p} command "/skills"
+
+function warps(p: player):
+	wait 1 tick
+	set {openmenu::%{_p}%} to true
+	open virtual chest inventory with size 1 named "Warp" to {_p}
+	format({_p}, 9)
+	format gui slot 2 of {_p} with enchanting table named "&e&lEnchanting" with lore "&f", "&7Left click to teleport", "&7To Enchanting Room" and "&f" to run {_p} command "/enchanting"
+	format gui slot 4 of {_p} with grass block named "&e&lPlot" with lore "&f", "&7Left click to teleport", "&7To your plot." and "&f" to run {_p} command "/p home"
+	format gui slot 3 of {_p} with ender chest named "&e&lCrates" with lore "&f", "&7Left click to teleport", "&7To Crates." and "&f" to run {_p} command "/crates"
+	format gui slot 5 of {_p} with jukebox named "&e&lCasino" with lore "&f", "&7Left click to teleport", "&7To The Casino." and "&f" to run {_p} command "/casino"
+
+on inventory close:
+	if {openmenu::%player%} is true:
+		delete {openmenu::%player%}
+
+
+on join:
+	if {joinfirst::%player's uuid%} is not set:
+		send "&3&lAzure Gens &e&lWelcome!!&e Do /Start to get started, if you need any help do /help"
+		set {placegens4::%player's uuid%} to 0
+		set {maxgens4::%player's uuid%} to 14
+		set {maxXgens::%player's uuid%} to 49
+		set {joinfirst::%player's uuid%} to true
+
+command /start:
+	trigger:
+		if {start::%player's uuid%} is not set:
+			give player stone pickaxe
+			give player stone axe
+			give player stone shovel
+			give player {Gens::Items::Wheat}
+			execute console command "/mvtp %player% azure1"
+			wait 2 ticks
+			make player execute "/p auto"
+			set {start::%player's uuid%} to true
+
+
+
+on stepping on a pressure plate:
+	if event-block is a iron pressure plate:
+		play sound "block.note_block.bit" with pitch 0.2
+	else if event-block is a gold pressure plate:
+		play sound "block.note_block.bit" with pitch 1.2

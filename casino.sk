@@ -1,0 +1,87 @@
+on load:
+	set {casinoblock} to note block named "&bCASINO BLOCK" with lore "&4ADMIN_BLOCK"
+
+command /givecasinoblock:
+	permission: op	
+	trigger:
+		give player {casinoblock}
+
+on place note block:
+	if player's tool is {casinoblock}:
+		set {casinoblock::%location of event-block%} to true
+
+on break note block:
+	if {casinoblock::%location of event-block%} is true:
+		delete {casinoblock::%location of event-block%} 
+
+on break note block:
+	if player is not op:
+		cancel event
+		set {casinoblock::%location of event-block%} to true
+
+on right click:
+	if {casinoblock::%location of event-block%} is true:
+		if {%player%::bet} is not set:
+			set {%player%::bet} to "&cNot set!"
+		cancel event
+		open virtual chest inventory named "&eCasino" with size 3 for player
+		format(player,27)
+		format gui slot 11 of player with sunflower named "&6&lCoin Toss!" with lore "&7Right click to do a coin toss!" and "&7Current Bet: %{%player%::bet}%" to run:
+			if {%player%::bet} is "&cNot set!":
+				send "&c&lAzure Casino &fYou need to set your bet by doing &e/setcasinobet (number)"
+			else:
+				open virtual chest inventory with size 1 named "&4&lARE YOU SURE?" to player
+				format(player,27)
+				format gui slot 4 of player with red wool named "&4&lARE YOU SURE?" with lore "&fCLICKING THIS BUTTON WILL PLACE YOUR BET!" and "&7Current Bet: %{%player%::bet}%" to run:
+					close player's inventory
+					if {coins::%player's uuid%} >= {%player%::bet}:
+						set {_num} to random integer between 1 and 100
+						if {_num} is between 1 and 35:
+							add {%player%::bet} to {coins::%player's uuid%}
+							send "&c&lAzure Casino &fYou just doubled your bet!"
+						else:
+							remove {%player%::bet} from {coins::%player's uuid%}
+							send "&c&lAzure Casino &fYou lost %{%player%::bet}%!"
+					else:
+						send "&c&lAzure Casino &fYou can't bet that much money!"
+
+command /setcasinobet [<integer>]:
+	trigger:
+		if arg-1 > 0:
+			set {%player%::bet} to arg-1
+			send "&c&lAzure Casino &fYour bet has been set to %arg-1%"
+		
+
+
+command /lotterylist:
+	permission: op
+	trigger:
+		send "%{lotteryraffles::*}%"
+		loop {lotteryraffles::*}:
+			add 1 to {_num}
+		wait 2 tick
+		send "In total there are %{_num}% raffles overall!"
+
+command /setjackpot [<integer>]:
+	permission: op
+	trigger:
+		set {globaljackpot} to arg-1
+
+command /jackpothologram:
+	permission: op
+	trigger:
+		spawn 1 armor stand at location of player
+		add "{CustomNameVisible:1}" to nbt of last spawned armor stand
+		add "{NoGravity:1b}" to nbt of last spawned armor stand
+		add "{Invisible:1b}" to nbt of last spawned armor stand
+		set display name of last spawned armor stand to "&6%{globaljackpot}%" 
+
+command /loadjackpotholo:
+	permission: op
+	trigger:
+		loop all entities:
+			if loop-value is armor stand:
+				if display name of loop-value is {lastjackpot}:
+					set display name of armor stand to "&6%{globaljackpot}%"
+		send "&6jackpot holos loaded"
+

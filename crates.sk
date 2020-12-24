@@ -1,0 +1,227 @@
+options:
+	prefix: &3&LAzure Crates &r 
+function crate(p: player):
+	set {_x} to 0
+	loop 27 times:
+		format gui slot {_x} of {_p} with purple glass pane named " "
+		add 1 to {_x}
+on rightclick on ender chest:
+	if {EGC.crate.%location of block%} is true:
+		cancel event
+		set {cratevent::%player%} to true
+		if player's tool is tripwire hook:
+			if name of player's tool contains {EGC.crate.name.%location of block%}:
+				open virtual chest inventory with size 3 named "%{EGC.crate.name.%location of block%}% Crate" to player
+				crate(player)
+				set {cratename} to {EGC.crate.name.%location of block%}
+				remove 1 of player's tool from player
+				loop 50 times:
+					if {cratevent::%player%} is true:
+						format gui slot 13 of player with {EGC.crate.%{cratename}%::%{cycle}%}
+						play sound "UI.BUTTON.CLICK" with volume 100 and pitch 1 at player for player
+						wait 0.2 seconds
+						set {cycle} to random integer between 9 and 17
+				play sound "entity.experience_orb.pickup" with volume 100 and pitch 1 at player for player
+				if {cratevent::%player%} is true:
+					format gui slot 13 of player with {EGC.crate.%{cratename}%::%{cycle}%}
+				else:
+					set {cycle} to random integer between 9 and 17
+				give player {EGC.crate.%{cratename}%::%{cycle}%}
+				send "{@prefix}&aYou Obtained %{EGC.crate.%{cratename}%::%{cycle}%}%"
+			else:
+				send "{@prefix}&cYou Need A %{EGC.crate.name.%location of block%}% &cCrate Key"
+				push the player backwards at speed 0.5
+				push the player upwards at speed 0.2
+		else:
+			push the player backwards at speed 0.5
+			push the player upwards at speed 0.2
+			send "{@prefix}&cYou Need A %{EGC.crate.name.%location of block%}% &cCrate Key"
+on leftclick:
+	player is not sneaking
+	if {EGC.crate.%location of block%} is true:
+		cancel event	
+		open virtual chest inventory with size 3 named "%{EGC.crate.name.%location of block%}% Crate" to player
+		set {cratename} to {EGC.crate.name.%location of block%}
+		set {_slot} to 9
+		format gui slot 0,1,2,3,4,5,6,7,8,18,19,20,21,22,23,24,25 and 26 of player with white stained glass pane named "&f"
+		loop 9 times:
+			format gui slot {_slot} of player with {EGC.crate.%{cratename}%::%{_slot}%}
+			add 1 to {_slot}
+		
+
+on place:
+	if player's tool is ender chest:
+		if lore of player's tool is "&7(&6&l EGC &7| &9&lCRATE&7 )":
+			if {EGC.crate.type.%name of player's tool%} is true:
+				if player has permission "EGC.crate.place":
+					set {EGC.crate.%location of block%} to true
+					set {EGC.crate.name.%location of block%} to name of player's tool
+					send "{@prefix}&a%name of player's tool% &aCrate has been successfully created."
+					remove player's tool from player
+					stop
+				else:
+					send "{@prefix}&4You Dont Have Permssions To Place Crates"
+					remove player's tool from player
+					cancel event
+on break:
+	if {EGC.crate.%location of block%} is true:
+		if player has permission "EGC.crate.break":
+			cancel event
+			delete {EGC.crate.%location of block%}
+			send "{@prefix}&c%{EGC.crate.name.%location of block%}% &cCrate has been successfully removed."
+
+command /crate [<text>] [<text="">] [<player=%player%>]:
+	trigger:
+		if player has permission "epiccrate.cratesettings":
+			if arg-1 is set:
+				if arg-1 is "create":
+					if arg-2 is set:
+						if {EGC.crate.type.%arg-2%} is true:
+							send "{@prefix}&cCrate Type %arg-2%&c Was Already Created"
+							stop
+						else:
+							set {EGC.crate.type.%arg-2%} to true
+							add arg-2 to {EGC.crate.list::*}
+							send "{@prefix}&aCrate Type %arg-2% &aCreated"
+				if arg-1 is "delete":
+					if arg-2 is set:
+						if {EGC.crate.type.%arg-2%} is true:
+							delete {EGC.crate.type.%arg-2%}
+							remove arg-2 from {EGC.crate.list::*}
+							send "{@prefix}&cCrate Type %arg-2% &cDeleted"
+						else:
+							send "{@prefix}&cCrate Type %arg-2% &cHas Not Been Created"
+							stop
+				if arg-1 is "give":
+					if arg-2 is set:
+						if {EGC.crate.type.%arg-2%} is true:
+							give player ender chest named arg-2 with lore "&7(&6&l EGC &7| &9&lCRATE&7 )"
+				if arg-1 is "items":
+					if arg-2 is set:
+						if {EGC.crate.type.%arg-2%} is true:
+							open virtual chest inventory with size 3 named "%arg-2% | Item Editor" to player
+							set {_slot} to 9
+							format gui slot 0,1,2,3,4,5,6,7,8,18,19,20,21,22,23,24,25 and 26 of player with white stained glass pane named "&f"
+							loop 9 times:
+								set slot {_slot} of current inventory of player to {EGC.crate.%arg-2%::%{_slot}%}
+								add 1 to {_slot}
+							format gui slot 22 of player with anvil named "&aClick to save" to run player command "/savecrate %arg-2%"
+				if arg-1 is "list":
+					set {EGC.crate.list.%player%} to 0
+					loop {EGC.crate.list::*}:
+						add 1 to {EGC.crate.list.%player%}
+					wait 1 tick
+					if {EGC.crate.list.%player%} is 0:
+						send "{@prefix}&cNo Crates does exist."
+					else:
+						set {EGC.crate.list.%player%} to "%{EGC.crate.list::*}%"
+						replace all "," in {Crates.L.%player%} with "&f,&9"
+						replace all "and" in {Crates.L.%player%} with "&fand&9"
+						send "{@prefix}&aAll Crates: &9%{EGC.crate.list.%player%}%&f."
+				if arg-1 is "key":
+					if player has permission "epiccrate.givekey":
+						set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+						give arg-3 {_item} named "&a%arg-2% Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+						send "{@prefix}&aYou Obtained 1&a %arg-2%&a keys" to arg-3
+				if arg-1 is "help":
+					send "&7|------&6EGC CRATES&7------|"
+					send ""
+					send "&7-&a/crate Create [<CrateName>] &7-- &9Creates Crate Type"
+					send "&7-&a/crate Delete [<CrateName>] &7-- &9Deletes Crate Type"
+					send "&7-&a/crate List [<CrateName>] &7-- &9List all crate types"
+					send ""
+					send "&7-&a/crate Give [<CrateName>] &7-- &9Gives a Placable Crate Object"
+					send ""
+					send "&7-&a/crate Items [<CrateName>] &7-- &9Edits A Crates Items"
+					send ""
+					send "&7-&a/crate key [<CrateKeyName>] [<player>] &7-- &9Give Crate key"
+				if arg 1 is not "help" or "list" or "create" or "delete" or "give" or "key" or "items":
+					send "{@prefix}&cUse /crate help"
+			else:
+				send "{@prefix}&cUse /crate help"
+		else:
+			send "{@prefix}&cYou dont have The Permssions for that"
+command /savecrate <text>:
+	trigger:
+		if player has permission "EGC.save":
+			set {_slot} to 9
+			loop 9 times:
+				set {EGC.crate.%arg-1%::%{_slot}%} to slot {_slot} of current inventory of player
+				add 1 to {_slot}
+			send "{@prefix}&aSaved chest" to player
+
+command /claimcrate:
+	trigger:
+		if {cratetime::%player%} is not set:
+			if player has permission "crate.daily":
+				give player 3 tripwire hook of unbreaking 3 named "&aDaily Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+			if player has permission "crate.coal":
+				give player 3 tripwire hook of unbreaking 3 named "&aCoal Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+			if player has permission "crate.iron":
+				give player 3 tripwire hook of unbreaking 3 named "&aIron Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+			if player has permission "crate.gold":
+				give player 3 tripwire hook of unbreaking 3 named "&aGold Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+			if player has permission "crate.diamond":
+				give player 3 tripwire hook of unbreaking 3 named "&aDiamond Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+		else:
+			send "{@prefix}&c&lYOU HAVE ALREADY CLAIMED YOUR CRATES TODAY"
+		set {cratetime::%player%} to true
+every 12 hours:
+	delete {cratetime::*}
+command /cratereset:
+	permission: crate.reset
+	trigger:
+		delete {cratetime::*}
+on inventory close:
+	if {cratevent::%player%} is true:
+		set {cratevent::%player%} to false
+
+command /crates:
+	trigger:
+		teleport player to {crates}
+command /casino:
+	trigger:
+		teleport player to {casino}
+
+command /keyall:
+	trigger:
+		player has permission "rank.keyall"
+		if {keyall::%player's uuid%} is not set:
+			set {keyall::%player's uuid%} to now
+			broadcast "&f"
+			broadcast "   &3&lAzure Crates" 
+			broadcast " &b%player%&b has initiated a keyall!"
+			broadcast "&f"
+			wait 2 second
+			loop all players:
+				chance of 75%:
+					set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+					give loop-player {_item} named "&aVIP Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				else:
+					set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+					give loop-player {_item} named "&aPRO Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+		else:
+			set {_delay} to 1 second
+			if player's group is "vip":
+				set {_delay} to 48 hours
+			if player's group is "pro":
+				set {_delay} to 24 hours
+			if player's group is "premium":
+				set {_delay} to 12 hours
+			if difference between now and {keyall::%player's uuid%} is greater than {_delay}:
+				set {keyall::%player's uuid%} to now
+				broadcast "&f"
+				broadcast "   &3&lAzure Crates" 
+				broadcast " &b%player%&b has initiated a keyall!"
+				broadcast "&f"
+				wait 2 second
+				loop all players:
+					chance of 75%:
+						set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+						give loop-player {_item} named "&aVIP Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+					else:
+						set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+						give loop-player {_item} named "&aPRO Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+			else:
+				send "&3&lAzure Crates &cYou must wait %{_delay}%&c between keyalls"
+			

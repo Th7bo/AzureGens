@@ -1,0 +1,246 @@
+command /achievements:
+	aliases: /ach, /a 
+	trigger:
+		wait 1 tick
+		set {openmenu::%player%} to true
+		open virtual chest inventory with size 4 named "&eAchievements" to player
+		format gui slot 0 of player with paper named "&aThe Very Beggining" with lore "&7 " and "&eType the command /start" and "&7Task Status: %{startdone::%player%}%" to run:
+			if {startdone::%player%} is "&aClaim Reward":
+				set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+				give player {_item} named "&aAchievement Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				send "&aReward successfully claimed!"
+				set {startdone::%player%} to "&aFinished!"
+				close player's inventory
+		format gui slot 1 of player with paper named "&aSmart Phone" with lore "&7 " and "&eOpen the Azure Menu in your inventory" and "&7Task Status: %{smartphonedone::%player%}%" to run:
+			if {smartphonedone::%player%} is "&aClaim Reward":
+				set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+				give player {_item} named "&aAchievement Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				send "&aReward successfully claimed!"
+				set {smartphonedone::%player%} to "&aFinished!"
+				close player's inventory
+		format gui slot 2 of player with paper named "&aAutomatic!" with lore "&7 " and "&ePlace a dirt generator" and "&7Task Status: %{placegendone::%player%}%" to run:
+			if {placegendone::%player%} is "&aClaim Reward":
+				set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+				give player {_item} named "&aAchievement Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				send "&aReward successfully claimed!"
+				set {placegendone::%player%} to "&aFinished!"
+				close player's inventory
+		format gui slot 3 of player with paper named "&aStone Age" with lore "&7 " and "&eGet 50 Cobblestone" and "&7Task Status: %{cobbledone::%player%}%" to run:
+			if {cobbledone::%player%} is "&aClaim Reward":
+				set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+				give player {_item} named "&aAchievement Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				send "&aReward successfully claimed!"
+				set {cobbledone::%player%} to "&aFinished!"
+				close player's inventory
+		format gui slot 4 of player with paper named "&aSteel!" with lore "&7 " and "&eGet 50 Iron Ingots" and "&7Task Status: %{irondone::%player%}%" to run:
+			if {irondone::%player%} is "&aClaim Reward":
+				set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+				give player {_item} named "&aAchievement Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				send "&aReward successfully claimed!"
+				set {irondone::%player%} to "&aFinished!"
+				close player's inventory
+		format gui slot 5 of player with paper named "&aGold!" with lore "&7 " and "&eGet 50 Gold Ingots" and "&7Task Status: %{golddone::%player%}%" to run:
+			if {golddone::%player%} is "&aClaim Reward":
+				set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+				give player {_item} named "&aAchievement Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				send "&aReward successfully claimed!"
+				set {golddone::%player%} to "&aFinished!"
+				close player's inventory
+		format gui slot 6 of player with paper named "&aLots o' Gold!" with lore "&7 " and "&eGet 100 Gold Ingots" and "&7Task Status: %{gold2done::%player%}%" to run:
+			if {gold2done::%player%} is "&aClaim Reward":
+				set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+				give player {_item} named "&aAchievement Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				send "&aReward successfully claimed!"
+				set {gold2done::%player%} to "&aFinished!"
+				close player's inventory
+		format gui slot 7 of player with paper named "&aWires" with lore "&7 " and "&eGet 100 Redstone Dust" and "&7Task Status: %{redstonedone::%player%}%" to run:
+			if {redstonedone::%player%} is "&aClaim Reward":
+				set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+				give player {_item} named "&aAchievement Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				send "&aReward successfully claimed!"
+				set {redstonedone::%player%} to "&aFinished!"
+				close player's inventory
+		format gui slot 8 of player with paper named "&aUseless" with lore "&7 " and "&eGet 100 Lapis Lazzuli" and "&7Task Status: %{lapisdone::%player%}%" to run:
+			if {lapisdone::%player%} is "&aClaim Reward":
+				set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+				give player {_item} named "&aAchievement Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				send "&aReward successfully claimed!"
+				set {lapisdone::%player%} to "&aFinished!"
+				close player's inventory
+		format gui slot 9 of player with paper named "&aDIAMONDS!!!" with lore "&7 " and "&eGet 100 Diamonds" and "&7Task Status: %{diamonddone::%player%}%" to run:
+			if {diamonddone::%player%} is "&aClaim Reward":
+				set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+				give player {_item} named "&aAchievement Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				send "&aReward successfully claimed!"
+				set {diamonddone::%player%} to "&aFinished!"
+				close player's inventory
+		format gui slot 10 of player with paper named "&aDown from your gen!" with lore "&7 " and "&eGet 100 Netherite Ingots" and "&7Task Status: %{netherdone::%player%}%" to run:
+			if {netherdone::%player%} is "&aClaim Reward":
+				set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+				give player {_item} named "&aAchievement Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				send "&aReward successfully claimed!"
+				set {netherdone::%player%} to "&aFinished!"
+				close player's inventory
+		format gui slot 11 of player with paper named "&aHardcore Parkour" with lore "&7 " and "&eComplete the parkour at spawn!" and "&7Task Status: %{parkourdone::%player%}%" to run:
+			if {parkourdone::%player%} is "&aClaim Reward":
+				set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+				give player {_item} named "&aAchievement Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				send "&aReward successfully claimed!"
+				set {parkourdone::%player%} to "&aFinished!"
+				close player's inventory
+		format gui slot 12 of player with paper named "&a1000 Dollars" with lore "&7 " and "&eGet 1000 Coins" and "&7Task Status: %{1kdone::%player%}%" to run:
+			if {1kdone::%player%} is "&aClaim Reward":
+				set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+				give player {_item} named "&aAchievement Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				send "&aReward successfully claimed!"
+				set {1kdone::%player%} to "&aFinished!"
+				close player's inventory
+		format gui slot 13 of player with paper named "&a2000 Dollars" with lore "&7 " and "&eGet 2000 Coins" and "&7Task Status: %{2kdone::%player%}%" to run:
+			if {2kdone::%player%} is "&aClaim Reward":
+				set {_item} to "1 tripwire hook of unbreaking 3" parsed as item
+				give player {_item} named "&aAchievement Key" with lore "&7(&6&l EGC &7| &9&lKEY&7 )"
+				send "&aReward successfully claimed!"
+				set {2kdone::%player%} to "&aFinished!"
+				close player's inventory
+		
+
+on join:
+	if {startdone::%player%} is not set:
+		set {startdone::%player%} to "&cNot Done!"
+	if {smartphonedone::%player%} is not set:
+		set {smartphonedone::%player%} to "&cNot Done!"
+	if {1kdone::%player%} is not set:
+		set {1kdone::%player%} to "&cNot Done!"
+	if {placegendone::%player%} is not set:
+		set {placegendone::%player%} to "&cNot Done!"
+	if {cobbledone::%player%} is not set:
+		set {cobbledone::%player%} to "&cNot Done!"
+	if {irondone::%player%} is not set:
+		set {irondone::%player%} to "&cNot Done!"
+	if {golddone::%player%} is not set:
+		set {golddone::%player%} to "&cNot Done!"
+	if {gold2done::%player%} is not set:
+		set {gold2done::%player%} to "&cNot Done!"
+	if {redstonedone::%player%} is not set:
+		set {redstonedone::%player%} to "&cNot Done!"
+	if {lapisdone::%player%} is not set:
+		set {lapisdone::%player%} to "&cNot Done!"
+	if {diamonddone::%player%} is not set:
+		set {diamonddone::%player%} to "&cNot Done!"
+	if {netherdone::%player%} is not set:
+		set {netherdone::%player%} to "&cNot Done!"
+	if {parkourdone::%player%} is not set:
+		set {parkourdone::%player%} to "&cNot Done!"
+	if {2kdone::%player%} is not set:
+		set {2kdone::%player%} to "&cNot Done!"
+
+command /giveparkourblock:
+	permission: op
+	trigger:
+		give player green terracotta named "&bParkour End Block" with lore "&4ADMIN_ITEM"
+
+on place: 
+	if player's tool is green terracotta named "&bParkour End Block":
+		set {parkourend::%location of event-block%} to true
+
+on walk on green terracotta:
+	if {parkourend::%location of event-block%} is true:
+		if {parkourdone::%player%} is "&cNot Done!":
+			send "&eYou completed the Achievement &aHardcore Parkour&e! Claim your reward by typing /achievement or /a"
+			set {parkourdone::%player%} to "&aClaim Reward"
+			PLAY SOUND "ui.toast.challenge_complete" for player
+
+on command "/start":
+	if {startdone::%player%} is "&cNot Done!":
+		set {startdone::%player%} to "&aClaim Reward"
+		wait 2 second
+		send "&eYou completed the achievement &aThe Very Beginning&e! Claim your reward by typing /achievement or /a"
+		PLAY SOUND "ui.toast.challenge_complete" for player
+	else:
+		stop
+
+on right click:
+	if colored name of player's tool is "&3&lAzure Menu":
+		if {smartphonedone::%player%} is "&cNot Done!":
+			send "&eYou completed the Achievement &aSmart Phone&e! Claim your reward by typing /achievement or /a"
+			set {smartphonedone::%player%} to "&aClaim Reward"
+			PLAY SOUND "ui.toast.challenge_complete" for player
+
+on place:
+	if colored name of player's tool is "&3&lAzure Gens &8&l| &bDirt":
+		if {placegendone::%player%} is "&cNot Done!":
+			set {placegendone::%player%} to "&aClaim Reward"
+			send "&eYou completed the achievement &aAutomatic&e! Claim your reward by typing /achievement or /a" to player
+			PLAY SOUND "ui.toast.challenge_complete" for player
+
+every 5 seconds in "world":
+	loop all players:
+		if {1kdone::%loop-player%} is "&cNot Done!":
+			if {coins::%loop-player's uuid%} is above 999:
+				set {1kdone::%loop-player%} to "&aClaim Reward"
+				send "&eYou completed the achievement &a1000 Dollars&e! Claim your reward by typing /achievement or /a" to loop-player
+		if {2kdone::%loop-player%} is "&cNot Done!":
+			if {coins::%loop-player's uuid%} is above 1999:
+				set {2kdone::%loop-player%} to "&aClaim Reward"
+				send "&eYou completed the achievement &a2000 Dollars&e! Claim your reward by typing /achievement or /a" to loop-player
+				PLAY SOUND "ui.toast.challenge_complete" for loop-player
+every 2 seconds in "world":
+	loop all players:
+		if {cobbledone::%loop-player%} is "&cNot Done!":
+			if amount of cobblestone in loop-player's inventory is above 49:
+				set {cobbledone::%loop-player%} to "&aClaim Reward"
+				send "&eYou completed the achievement &aStone Age&e! Claim your reward by typing /achievement or /a" to loop-player
+				PLAY SOUND "ui.toast.challenge_complete" for loop-player
+		if {irondone::%loop-player%} is "&cNot Done!":
+			if amount of iron ingot in loop-player's inventory is above 49:
+				set {irondone::%loop-player%} to "&aClaim Reward"
+				send "&eYou completed the achievement &aSteel!&e! Claim your reward by typing /achievement or /a" to loop-player
+				PLAY SOUND "ui.toast.challenge_complete" for loop-player
+		if {golddone::%loop-player%} is "&cNot Done!":
+			if amount of gold ingot in loop-player's inventory is above 49:
+				set {golddone::%loop-player%} to "&aClaim Reward"
+				send "&eYou completed the achievement &aGold!&e! Claim your reward by typing /achievement or /a" to loop-player
+				PLAY SOUND "ui.toast.challenge_complete" for loop-player
+		if {gold2done::%loop-player%} is "&cNot Done!":
+			if amount of gold ingot in loop-player's inventory is above 99:
+				set {gold2done::%loop-player%} to "&aClaim Reward"
+				send "&eYou completed the achievement &aLots o' Gold!&e! Claim your reward by typing /achievement or /a" to loop-player
+				PLAY SOUND "ui.toast.challenge_complete" for loop-player
+		if {redstonedone::%loop-player%} is "&cNot Done!":
+			if amount of redstone in loop-player's inventory is above 99:
+				set {redstonedone::%loop-player%} to "&aClaim Reward"
+				send "&eYou completed the achievement &aWires&e! Claim your reward by typing /achievement or /a" to loop-player
+				PLAY SOUND "ui.toast.challenge_complete" for loop-player
+		if {lapisdone::%loop-player%} is "&cNot Done!":
+			if amount of lapis in loop-player's inventory is above 99:
+				set {lapisdone::%loop-player%} to "&aClaim Reward"
+				send "&eYou completed the achievement &aUseless&e! Claim your reward by typing /achievement or /a" to loop-player
+				PLAY SOUND "ui.toast.challenge_complete" for loop-player
+		if {diamonddone::%loop-player%} is "&cNot Done!":
+			if amount of diamond in loop-player's inventory is above 99:
+				set {diamonddone::%loop-player%} to "&aClaim Reward"
+				send "&eYou completed the achievement &aDIAMONDS!!!&e! Claim your reward by typing /achievement or /a" to loop-player
+				PLAY SOUND "ui.toast.challenge_complete" for loop-player
+		if {netherdone::%loop-player%} is "&cNot Done!":
+			if amount of netherite ingot in loop-player's inventory is above 99:
+				set {netherdone::%loop-player%} to "&aClaim Reward"
+				send "&eYou completed the achievement &aDown in your gen&e! Claim your reward by typing /achievement or /a" to loop-player
+				PLAY SOUND "ui.toast.challenge_complete" for loop-player
+
+
+
+command /resetasks:
+	permission: op
+	trigger:
+		delete {startdone::%player%}
+		delete {smartphonedone::%player%}
+		delete {1kdone::%player%}
+		delete {placegendone::%player%}
+		delete {cobbledone::%player%}
+		delete {irondone::%player%}
+		delete {golddone::%player%}
+		delete {gold2done::%player%}
+		delete {redstonedone::%player%}
+		delete {lapisdone::%player%}
+		delete {diamonddone::%player%}
+		delete {netherdone::%player%}

@@ -1,0 +1,497 @@
+on join:
+	if {GenSlots::%uuid of player%::Used} is not set:
+		set {GenSlots::%uuid of player%::Used} to 0
+	if {GenSlots::%uuid of player%::Max} is not set:
+		set {GenSlots::%uuid of player%::Max} to 25
+	if {GenSlots::%uuid of player%::BuyMax} is not set:
+		set {GenSlots::%uuid of player%::BuyMax} to 50
+
+on load:
+	# Important #
+	set {genTypes::*} to "netherrack", "Obsidian", "QuartzBlock", "Wheat", "Pumpkin", "beetroot", "Carrot", "Potato", "Cactus", "Bamboo", "SugarCane", "Kelp","Dirt", "Coal", "CoalBlock", "Iron", "IronBlock", "Gold", "GoldBlock", "Lapis", "LapisBlock", "Redstone", "Redstoneblock", "Diamond", "DiamondBlock", "Emerald", "EmeraldBlock", "Netherite", "NetheriteBlock" and "Melon"
+	# Gen Blocks #
+	set {Gens::Blocks::Wheat} to hay bale
+	set {Gens::Blocks::Melon} to melon
+	set {Gens::Blocks::Pumpkin} to pumpkin
+	set {Gens::Blocks::Beetroot} to red concrete
+	set {Gens::Blocks::Carrot} to orange concrete
+	set {Gens::Blocks::Potato} to yellow concrete
+	set {Gens::Blocks::Cactus} to green wool
+	set {Gens::Blocks::SugarCane} to lime concrete
+	set {Gens::Blocks::Kelp} to dried kelp block
+	set {Gens::Blocks::Bamboo} to lime terracotta
+	set {Gens::Blocks::Coal} to coal ore
+	set {Gens::Blocks::CoalBlock} to coal Block
+	set {Gens::Blocks::Iron} to iron ore
+	set {Gens::Blocks::IronBlock} to iron Block
+	set {Gens::Blocks::Gold} to Gold ore
+	set {Gens::Blocks::GoldBlock} to Gold Block
+	set {Gens::Blocks::Lapis} to Lapis ore
+	set {Gens::Blocks::LapisBlock} to Lapis Block
+	set {Gens::Blocks::Redstone} to Redstone ore
+	set {Gens::Blocks::RedstoneBlock} to Redstone Block
+	set {Gens::Blocks::Diamond} to Diamond ore
+	set {Gens::Blocks::DiamondBlock} to Diamond Block
+	set {Gens::Blocks::Emerald} to Emerald ore
+	set {Gens::Blocks::EmeraldBlock} to Emerald Block
+	set {Gens::Blocks::Netherite} to ancient debris
+	set {Gens::Blocks::NetheriteBlock} to Netherite Block
+	set {Gens::Blocks::Obsidian} to Obsidian
+	set {Gens::Blocks::Netherrack} to Netherrack
+	set {Gens::Blocks::Basalt} to Basalt
+	set {Gens::Blocks::Blackstone} to Blackstone
+	set {Gens::Blocks::Quartz} to nether quartz ore
+	set {Gens::Blocks::QuartzBlock} to quartz Block
+	# Gen Items #
+	set {Gens::Items::Wheat} to shiny hay bale named "&3&LAzure Gen &8&L| &bWheat" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Wheat""}" to nbt of {Gens::Items::Wheat}
+	set {Gens::Items::Melon} to shiny melon named "&3&LAzure Gen &8&L| &bMelon" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Melon""}" to nbt of {Gens::Items::Melon}
+	set {Gens::Items::Pumpkin} to shiny pumpkin named "&3&LAzure Gen &8&L| &bPumpkin" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Pumpkin""}" to nbt of {Gens::Items::Pumpkin}
+	set {Gens::Items::Beetroot} to shiny Red concrete named "&3&LAzure Gen &8&L| &bBeetroot" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Beetroot""}" to nbt of {Gens::Items::Beetroot}
+	set {Gens::Items::Carrot} to shiny orange concrete named "&3&LAzure Gen &8&L| &bCarrot" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Carrot""}" to nbt of {Gens::Items::Carrot}
+	set {Gens::Items::Potato} to shiny yellow concrete named "&3&LAzure Gen &8&L| &bPotato" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Potato""}" to nbt of {Gens::Items::Potato}
+	set {Gens::Items::Cactus} to shiny green wool named "&3&LAzure Gen &8&L| &bCactus" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Cactus""}" to nbt of {Gens::Items::Cactus}
+	set {Gens::Items::SugarCane} to shiny lime concrete named "&3&LAzure Gen &8&L| &bSugar Cane" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""SugarCane""}" to nbt of {Gens::Items::SugarCane}
+	set {Gens::Items::Kelp} to shiny dried kelp block named "&3&LAzure Gen &8&L| &bKelp" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Kelp""}" to nbt of {Gens::Items::Kelp}
+	set {Gens::Items::Bamboo} to shiny lime terracotta named "&3&LAzure Gen &8&L| &bBamboo" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Bamboo""}" to nbt of {Gens::Items::Bamboo}
+	set {Gens::Items::Coal} to shiny coal ore named "&3&LAzure Gen &8&L| &bCoal" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Coal""}" to nbt of {Gens::Items::Coal}
+	set {Gens::Items::CoalBlock} to shiny coal block named "&3&LAzure Gen &8&L| &bCoal Block" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""CoalBlock""}" to nbt of {Gens::Items::CoalBlock}
+	set {Gens::Items::Iron} to shiny Iron ore named "&3&LAzure Gen &8&L| &bIron" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Iron""}" to nbt of {Gens::Items::Iron}
+	set {Gens::Items::IronBlock} to shiny Iron block named "&3&LAzure Gen &8&L| &bIron Block" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""IronBlock""}" to nbt of {Gens::Items::IronBlock}
+	set {Gens::Items::Gold} to shiny gold ore named "&3&LAzure Gen &8&L| &bGold" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Gold""}" to nbt of {Gens::Items::gold}
+	set {Gens::Items::GoldBlock} to shiny gold block named "&3&LAzure Gen &8&L| &bGold Block" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""GoldBlock""}" to nbt of {Gens::Items::GoldBlock}
+	set {Gens::Items::Lapis} to shiny lapis ore named "&3&LAzure Gen &8&L| &bLapis" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Lapis""}" to nbt of {Gens::Items::Lapis}
+	set {Gens::Items::LapisBlock} to shiny lapis block named "&3&LAzure Gen &8&L| &bLapis Block" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""LapisBlock""}" to nbt of {Gens::Items::LapisBlock}
+	set {Gens::Items::Redstone} to shiny Redstone ore named "&3&LAzure Gen &8&L| &bRedstone" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Redstone""}" to nbt of {Gens::Items::Redstone}
+	set {Gens::Items::redstoneBlock} to shiny redstone block named "&3&LAzure Gen &8&L| &bRedstone Block" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""RedstoneBlock""}" to nbt of {Gens::Items::RedstoneBlock}
+	set {Gens::Items::Diamond} to shiny Diamond ore named "&3&LAzure Gen &8&L| &bDiamond" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Diamond""}" to nbt of {Gens::Items::Diamond}
+	set {Gens::Items::DiamondBlock} to shiny diamond block named "&3&LAzure Gen &8&L| &bDiamond Block" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""DiamondBlock""}" to nbt of {Gens::Items::DiamondBlock}
+	set {Gens::Items::Netherite} to shiny ancient debris named "&3&LAzure Gen &8&L| &bNetherite" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Netherite""}" to nbt of {Gens::Items::Netherite}
+	set {Gens::Items::NetheriteBlock} to shiny Netherite block named "&3&LAzure Gen &8&L| &bNetherite Block" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""NetheriteBlock""}" to nbt of {Gens::Items::NetheriteBlock}
+	set {Gens::Items::Emerald} to shiny Emerald ore named "&3&LAzure Gen &8&L| &bEmerald" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Emerald""}" to nbt of {Gens::Items::Emerald}
+	set {Gens::Items::EmeraldBlock} to shiny Emerald block named "&3&LAzure Gen &8&L| &bEmerald Block" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""EmeraldBlock""}" to nbt of {Gens::Items::EmeraldBlock}
+	set {Gens::Items::Obsidian} to shiny Obsidian named "&3&LAzure Gen &8&L| &bObsidian" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Obsidian""}" to nbt of {Gens::Items::Obsidian}
+	set {Gens::Items::Netherrack} to shiny Netherrack named "&3&LAzure Gen &8&L| &bNetherrack" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Netherrack""}" to nbt of {Gens::Items::Netherrack}
+	set {Gens::Items::Basalt} to shiny Basalt named "&3&LAzure Gen &8&L| &bBasalt" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Basalt""}" to nbt of {Gens::Items::Basalt}
+	set {Gens::Items::Blackstone} to shiny Blackstone named "&3&LAzure Gen &8&L| &bBlackstone" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Blackstone""}" to nbt of {Gens::Items::Blackstone}
+	add "{Gen:""Quartz""}" to nbt of {Gens::Items::Quartz}
+	set {Gens::Items::Quartz} to shiny Nether Quartz Ore named "&3&LAzure Gen &8&L| &bQuartz" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""Quartz""}" to nbt of {Gens::Items::Quartz}
+	set {Gens::Items::QuartzBlock} to shiny Quartz Block named "&3&LAzure Gen &8&L| &bQuartz Block" with lore "&f", "&7Place down this generator", "&7to start making inf items." and "&f"
+	add "{Gen:""QuartzBlock""}" to nbt of {Gens::Items::QuartzBlock}
+	# Gen Drops #
+	set {Gens::Drops::Wheat} to wheat named "&eWheat"
+	set {Gens::Drops::Melon} to melon slice named "&eMelon"
+	set {Gens::Drops::Pumpkin} to pumpkin pie named "&ePumpkin"
+	set {Gens::Drops::Beetroot} to Beetroot named "&eBeetroot"
+	set {Gens::Drops::Carrot} to Carrot named "&eCarrot"
+	set {Gens::Drops::Potato} to Potato named "&ePotato"
+	set {Gens::Drops::Cactus} to Cactus named "&eCactus"
+	set {Gens::Drops::SugarCane} to Sugar Cane named "&eSugar Cane"
+	set {Gens::Drops::Kelp} to Kelp named "&eKelp"
+	set {Gens::Drops::Bamboo} to Bamboo named "&eBamboo"
+	set {Gens::Drops::Coal} to Coal named "&eCoal"
+	set {Gens::Drops::CoalBlock} to Coal block named "&eCoal Block"
+	set {Gens::Drops::Iron} to Iron Ingot named "&eIron"
+	set {Gens::Drops::IronBlock} to Iron block named "&eIron Block"
+	set {Gens::Drops::Gold} to Gold Ingot named "&eGold"
+	set {Gens::Drops::GoldBlock} to Gold block named "&eGold Block"
+	set {Gens::Drops::Lapis} to Lapis named "&eLapis"
+	set {Gens::Drops::LapisBlock} to Lapis block named "&eLapis Block"
+	set {Gens::Drops::Redstone} to Redstone named "&eRedstone"
+	set {Gens::Drops::RedstoneBlock} to Redstone block named "&eRedstone Block"
+	set {Gens::Drops::Diamond} to Diamond named "&eDiamond"
+	set {Gens::Drops::DiamondBlock} to Diamond block named "&eDiamond Block"
+	set {Gens::Drops::Emerald} to Emerald named "&eEmerald"
+	set {Gens::Drops::EmeraldBlock} to Emerald block named "&eEmerald Block"
+	set {Gens::Drops::Netherite} to Netherite ingot named "&eNetherite"
+	set {Gens::Drops::NetheriteBlock} to Netherite block named "&eNetherite Block"
+	set {Gens::Drops::Obsidian} to Obsidian named "&eObsidian"
+	set {Gens::Drops::Netherrack} to netherrack named "&eNetherrack"
+	set {Gens::Drops::Basalt} to basalt named "&eBasalt"
+	set {Gens::Drops::Blackstone} to blackstone named "&eBlackstone"
+	set {Gens::Drops::Quartz} to quartz named "&eQuartz"
+	set {Gens::Drops::QuartzBlock} to quartz Block named "&eQuartz Block"
+
+	# Gen Upgrades #
+	set {Gens::Upgrades::Wheat::*} to "Melon", melon, 1.5 and "False"
+	set {Gens::Upgrades::Melon::*} to "Pumpkin", pumpkin, 3.7 and "False"
+	set {Gens::Upgrades::Pumpkin::*} to "Beetroot", red concrete, 7.9 and "False"
+	set {Gens::Upgrades::Beetroot::*} to "Carrot", orange concrete, 12.5 and "False"
+	set {Gens::Upgrades::Carrot::*} to "Potato", yellow concrete, 18.9 and "False"
+	set {Gens::Upgrades::Potato::*} to "Cactus", green wool, 26.4 and "False"
+	set {Gens::Upgrades::Cactus::*} to "SugarCane", lime concrete, 40.7 and "False"
+	set {Gens::Upgrades::SugarCane::*} to "Kelp", dried kelp block, 56.05 and "False"
+	set {Gens::Upgrades::Kelp::*} to "Bamboo", lime terracotta , 75.6 and "False"
+	set {Gens::Upgrades::Bamboo::*} to "Coal", Coal ore , 91.5 and "False"
+	set {Gens::Upgrades::Coal::*} to "CoalBlock", Coal Block , 105.4 and "False"
+	set {Gens::Upgrades::CoalBlock::*} to "Iron", Iron Ore , 117.25 and "False"
+	set {Gens::Upgrades::Iron::*} to "IronBlock", Iron Block , 137.65 and "False"
+	set {Gens::Upgrades::IronBlock::*} to "Gold", Gold ore , 152 and "False"
+	set {Gens::Upgrades::Gold::*} to "GoldBlock", Gold Block , 172.36 and "False"
+	set {Gens::Upgrades::GoldBlock::*} to "Lapis", Lapis Ore , 185 and "False"
+	set {Gens::Upgrades::Lapis::*} to "LapisBlock", Lapis Block , 196 and "False"
+	set {Gens::Upgrades::LapisBlock::*} to "Redstone", Redstone Ore , 213.3 and "False"
+	set {Gens::Upgrades::Redstone::*} to "RedstoneBlock", Redstone Block , 236.85 and "False"
+	set {Gens::Upgrades::RedstoneBlock::*} to "Diamond", Diamond Ore , 305.85 and "False"
+	set {Gens::Upgrades::Diamond::*} to "DiamondBlock", Diamond Block , 375 and "False"
+	set {Gens::Upgrades::DiamondBlock::*} to "Emerald", Emerald ore , 485 and "False"
+	set {Gens::Upgrades::Emerald::*} to "EmeraldBlock", Emerald block , 675 and "False"
+	set {Gens::Upgrades::EmeraldBlock::*} to "Netherite", ancient debris , 1000 and "False"
+	set {Gens::Upgrades::Netherite::*} to "NetheriteBlock", Netherite Block , 2500 and "False"
+	set {Gens::Upgrades::NetheriteBlock::*} to "Obsidian", Obsidian , 5750 and "False"
+	set {Gens::Upgrades::Obsidian::*} to "Netherrack", Netherrack , 7525 and "False"
+	set {Gens::Upgrades::Netherrack::*} to "Basalt", Basalt , 11325 and "False"
+	set {Gens::Upgrades::Basalt::*} to "Blackstone", Blackstone , 24525 and "False"
+	set {Gens::Upgrades::Blackstone::*} to "Quartz", Nether Quartz Ore , 37568 and "False"
+	set {Gens::Upgrades::Quartz::*} to "QuartzBlock", Quartz Block, 40000 and "False"
+	
+
+options:
+	# Titles #
+	Gen-Place-Succeed-Title: title "&aGen Placed" with subtitle "&7(&8%{GenSlots::%{_uuid}%::Used}% &7/ &8%{GenSlots::%{_uuid}%::Max}%&7)" to {_p} for 1 second with fade in 0.5 seconds and fade out 1 seconds
+	Gen-Place-Fail-Slots-Title: title "&cError" with subtitle "&7Not enough Gen Slots" to {_p} for 1 second with fade in 0.5 seconds and fade out 1 seconds
+	Gen-Place-Fail-Area-Title: title "&cError" with subtitle "&7You can't place here" to {_p} for 1 second with fade in 0.5 seconds and fade out 1 seconds
+	Gen-Fail-Full-Title: title "&cError" with subtitle "&7Inventory Full!" to {_p} for 1 second with fade in 0.5 seconds and fade out 1 seconds
+	Gen-Remove-Succeed-Title: title "&cGen Removed" with subtitle "&7(&8%{GenSlots::%{_uuid}%::Used}% &7/ &8%{GenSlots::%{_uuid}%::Max}%&7)" to {_p} for 1 second with fade in 0.5 seconds and fade out 1 seconds
+	Gen-Remove-Fail-Unowned: title "&cError" with subtitle "&7You don't own that Gen" to {_p} for 1 second with fade in 0.5 seconds and fade out 1 seconds
+	Gen-Place-Succeed-Upgrade: title "&aGen Upgraded" with subtitle "&f%{_old}% &7► &f%{_new}%" to {_p} for 1 second with fade in 0.5 seconds and fade out 1 seconds
+	Gen-Upgrade-Fail-Cost: title "&cError" with subtitle "&7You need &f%{_cost}% &7to Upgrade" to {_p} for 1 second with fade in 0.5 seconds and fade out 1 seconds
+	Gen-Upgrade-Fail-Max: title "&cError" with subtitle "&7This gen is max level" to {_p} for 1 second with fade in 0.5 seconds and fade out 1 seconds
+	Gen-Place-Fail-Cooldown: action bar "&cError&7: &7Place again in &f1s" to {_p}
+	Gen-Upgrade-Fail-Cooldown: action bar "&cError&7: &7Upgrade again in &f1s" to {_p}
+	# Sounds #
+	Global-Succeed-Sound: sound "BLOCK_NOTE_BLOCK_CHIME" at volume 1 with pitch 3 for {_p}
+	Global-Error-Sound: sound "BLOCK_NOTE_BLOCK_BASS" at volume 1 with pitch 3 for {_p}
+	Global-Pickup-Sound: sound "ENTITY_ITEM_PICKUP" at volume 1 with pitch 2 for {_p}
+	# Default Stuff #
+	Default-Max-Slots: 25
+
+# Functions #
+function genNotifications(p: player, id: text, old: text = "unknown", new: text = "unknown", cost: number = "unknown"):
+	# Initial Stuff #
+	set {_uuid} to uuid of {_p}
+	# Succeed #
+	if {_id} is "succeed-place":
+		send {@Gen-Place-Succeed-Title}
+		play {@Global-Succeed-Sound}
+	if {_id} is "succeed-remove":
+		send {@Gen-Remove-Succeed-Title}
+		play {@Global-Pickup-Sound}
+	if {_id} is "succeed-upgrade":
+		send {@Gen-Place-Succeed-Upgrade}
+		play {@Global-Succeed-Sound}
+	# Fail #
+	if {_id} is "fail-place-slots":
+		send {@Gen-Place-Fail-Slots-Title}
+		play {@Global-Error-Sound}
+	if {_id} is "fail-place-area":
+		send {@Gen-Place-Fail-Area-Title}
+		play {@Global-Error-Sound}
+	if {_id} is "fail-remove-unowned":
+		send {@Gen-Remove-Fail-Unowned}
+		play {@Global-Error-Sound}
+	if {_id} is "fail-remove-full":
+		send {@Gen-Fail-Full-Title}
+		play {@Global-Error-Sound}
+	if {_id} is "fail-upgrade-cost":
+		send {@Gen-Upgrade-Fail-Cost}
+	if {_id} is "fail-upgrade-max":
+		send {@Gen-Upgrade-Fail-Max}
+		play {@Global-Error-Sound}
+	if {_id} is "fail-place-cooldown":
+		send {@Gen-Place-Fail-Cooldown}
+		play {@Global-Error-Sound}
+	if {_id} is "fail-upgrade-cooldown":
+		send {@Gen-Upgrade-Fail-Cooldown}
+		play {@Global-Error-Sound}
+
+function genRemoval(p: player, bLoc: location, gLoc: location, genType: text, type: text) :: text:
+	set {_uuid} to uuid of {_p}
+	if {Gens::%{_genType}%::*} contains {_gLoc}:
+		if {Gens::%{_uuid}%::%{_genType}%::*} contains {_gLoc}:
+			if {_p} can hold 1 of {Gens::Items::%{_genType}%}:
+				remove 1 from {GenSlots::%{_uuid}%::Used}
+				remove {_gLoc} from {Gens::%{_uuid}%::%{_genType}%::*}
+				remove {_gLoc} from {Gens::%{_genType}%::*}
+				genNotifications({_p}, "succeed-remove")
+				give {Gens::Items::%{_genType}%} to {_p} if {_type} is "normal"
+				set block at {_bLoc} to air
+				stop
+			else:
+			genNotifications({_p}, "fail-remove-full")
+			return "fail-remove-full"
+			stop
+		else:
+			genNotifications({_p}, "fail-remove-unowned")
+			return "fail-remove-unowned"
+			stop
+
+# Gen Creating / Placing #
+on place:
+	if tag "Gen" of nbt of player's tool is set:
+		set {_tag} to tag "Gen" of nbt of player's tool
+		if {Cooldowns::GenPlace::%uuid of player%} is not set:
+			set {Cooldowns::GenPlace::%uuid of player%} to now
+		if difference between now and {Cooldowns::GenPlace::%uuid of player%} is greater than 0.8 seconds:
+			if {GenSlots::%uuid of player%::Used} is less than or equal to ({GenSlots::%uuid of player%::Max} - 1):
+				if event is not canceled:
+					wait 2.5 tick
+					if block at location of event-block is air:
+						genNotifications(event-player, "fail-place-area")
+						stop
+					else:
+						set {_loc} to location of event-block
+						add 0.5 to y-coordinate of {_loc}
+						add 1 to {GenSlots::%uuid of player%::Used}
+						add {_loc} to {Gens::%uuid of player%::%{_tag}%::*}
+						add {_loc} to {Gens::%{_tag}%::*}
+						genNotifications(event-player, "succeed-place")
+						set {Cooldowns::GenPlace::%uuid of player%} to now
+				else:
+					genNotifications(event-player, "fail-place-area")
+					cancel event
+			else:
+				genNotifications(event-player, "fail-place-slots")
+				cancel event
+		else:
+			genNotifications(event-player, "fail-place-cooldown")
+			cancel event
+
+# Events #
+on break:
+	set {_bLoc} to location of event-block
+	set {_gLoc} to {_bLoc}
+	add 0.5 to {_gLoc}'s y-coordinate
+	loop all indexes of {Gens::Blocks::*}:
+		if {Gens::Blocks::%loop-value%} is event-block:
+			genRemoval(event-player, {_bLoc}, {_gLoc}, "%loop-value%", "normal")
+			if genRemoval(event-player, {_bLoc}, {_gLoc}, "%loop-value%", "normal") is "fail-remove-unowned":
+				cancel event
+
+on left click:
+	player is sneaking
+	set {_bLoc} to location of event-block
+	set {_gLoc} to {_bLoc}
+	add 0.5 to {_gLoc}'s y-coordinate
+	loop all indexes of {Gens::Blocks::*}:
+		if {Gens::Blocks::%loop-value%} is event-block:
+			genRemoval(event-player, {_bLoc}, {_gLoc}, "%loop-value%", "normal")
+			if genRemoval(event-player, {_bLoc}, {_gLoc}, "%loop-value%", "normal") is "fail-remove-unowned":
+				cancel event
+
+
+
+function upgrade(type: text, p: player,tag: text,gLoc: location,bLoc: location):
+	set {_pu} to {_p}'s uuid
+	if {_type} is "NORMAL":
+		if {coins::%{_pu}%} >= {Gens::Upgrades::%{_tag}%::3}:
+			remove {Gens::Upgrades::%{_tag}%::3} from {coins::%{_pu}%}
+			remove {_gLoc} from {Gens::%{_pu}%::%{_tag}%::*}
+			remove {_gLoc} from {Gens::%{_tag}%::*}
+			set block at {_bLoc} to {Gens::Upgrades::%{_tag}%::2}
+			set {_nGenType} to {Gens::Upgrades::%{_tag}%::1}
+			add {_gLoc} to {Gens::%{_pu}%::%{_nGenType}%::*}
+			add {_gLoc} to {Gens::%{_nGenType}%::*}
+			set {_oGenType} to "%{_tag}%" in proper case
+			if {Gens::%{_nGenType}%::*} does not contain {_gLoc}:
+				add {_gLoc} to {Gens::%{_pu}%::%{_nGenType}%::*}
+				add {_gLoc} to {Gens::%{_nGenType}%::*}										
+			genNotifications({_p}, "succeed-upgrade", "%{_oGenType}%", "%{_nGenType}%")
+		else:
+			genNotifications({_p}, "fail-upgrade-cost", "unknown", "unknown", {Gens::Upgrades::%{_tag}%::3})
+	if {_type} is "DOUBLE":
+		set {_dTag} to {Gens::Upgrades::%{_tag}%::1}
+		set {_price} to {Gens::Upgrades::%{_dTag}%::3} + {Gens::Upgrades::%{_tag}%::3}
+		if {coins::%{_pu}%} >= {_price}:
+			remove {_price} from {coins::%{_pu}%}
+			remove {_gLoc} from {Gens::%{_pu}%::%{_Tag}%::*}
+			remove {_gLoc} from {Gens::%{_tag}%::*}
+			set block at {_bLoc} to {Gens::Upgrades::%{_dTag}%::2}
+			set {_nGenType} to {Gens::Upgrades::%{_dTag}%::1}
+			add {_gLoc} to {Gens::%{_pu}%::%{_nGenType}%::*}
+			add {_gLoc} to {Gens::%{_nGenType}%::*}
+			set {_oGenType} to "%{_tag}%" in proper case
+			if {Gens::%{_nGenType}%::*} does not contain {_gLoc}:
+				add {_gLoc} to {Gens::%{_pu}%::%{_nGenType}%::*}
+				add {_gLoc} to {Gens::%{_nGenType}%::*}										
+			genNotifications({_p}, "succeed-upgrade", "%{_oGenType}%", "%{_nGenType}%")
+		else:
+			genNotifications({_p}, "fail-upgrade-cost", "unknown", "unknown", {_price})
+	if {_type} is "TRIPLE":
+		set {_dTag} to {Gens::Upgrades::%{_tag}%::1}
+		set {_tTag} to {Gens::Upgrades::%{_dTag}%::1}
+		set {_price} to ({Gens::Upgrades::%{_tTag}%::3} + {Gens::Upgrades::%{_dTag}%::3} + {Gens::Upgrades::%{_tag}%::3})
+		if {coins::%{_pu}%} >= {_price}:
+			remove {_price} from {coins::%{_pu}%}
+			remove {_gLoc} from {Gens::%{_pu}%::%{_tag}%::*}
+			remove {_gLoc} from {Gens::%{_tag}%::*}
+			set block at {_bLoc} to {Gens::Upgrades::%{_tTag}%::2}
+			set {_nGenType} to {Gens::Upgrades::%{_tTag}%::1}
+			add {_gLoc} to {Gens::%{_pu}%::%{_nGenType}%::*}
+			add {_gLoc} to {Gens::%{_nGenType}%::*}
+			set {_oGenType} to "%{_tag}%" in proper case
+			if {Gens::%{_nGenType}%::*} does not contain {_gLoc}:
+				add {_gLoc} to {Gens::%{_pu}%::%{_nGenType}%::*}
+				add {_gLoc} to {Gens::%{_nGenType}%::*}										
+			genNotifications({_p}, "succeed-upgrade", "%{_oGenType}%", "%{_nGenType}%")
+		else:
+			genNotifications({_p}, "fail-upgrade-cost", "unknown", "unknown", {_price})
+
+
+on right click:
+	if player is not sneaking:
+		if {Cooldowns::GenUpgrade::%uuid of player%} is not set:
+			set {Cooldowns::GenUpgrade::%uuid of player%} to now
+		if difference between now and {Cooldowns::GenUpgrade::%uuid of player%} is greater than 1 seconds:
+			set {_bLoc} to location of event-block
+			set {_gLoc} to {_bLoc}
+			add 0.5 to {_gLoc}'s y-coordinate
+			loop all indexes of {Gens::Blocks::*}:
+				if {Gens::Blocks::%loop-value%} is event-block:
+					set {_tag} to loop-value
+					if {Gens::%{_tag}%::*} contains {_gLoc}:
+						if {Gens::%uuid of player%::%loop-value%::*} contains {_gLoc}:
+							if {Gens::Upgrades::%loop-value%::4} is "False":
+								set {Cooldowns::GenUpgrade::%uuid of player%} to now
+								cancel event
+								open virtual chest inventory with size 3 named "Upgrade" to player
+								format(player,27)
+								format gui slot 12 of player with {Gens::Upgrades::%loop-value%::2} named "&e&l%{Gens::Upgrades::%loop-value%::1}% &e&lUpgrade" with lore "&f", "&6&lPrice:", "&6⛁&e%regex({Gens::Upgrades::%{_tag}%::3})%" and "&f" to close:
+									upgrade("NORMAL",player,{_tag},{_gLoc},{_bLoc})
+									stop
+								set {_dTag} to {Gens::Upgrades::%loop-value%::1}
+								if {Gens::Upgrades::%{_dTag}%::1} is set:
+									set {_price} to ({Gens::Upgrades::%{_dTag}%::3} + {Gens::Upgrades::%{_tag}%::3})
+									format gui slot 13 of player with {Gens::Upgrades::%{_dTag}%::2} named "&e&l%{Gens::Upgrades::%{_dTag}%::1}% &e&lUpgrade &8(&7Double Upgrade&8)" with lore "&f", "&6&lPrice:", "&6⛁&e%regex({_price})%" and "&f" to close:
+										upgrade("DOUBLE",player,{_tag},{_gLoc},{_bLoc})
+										stop
+								set {_tTag} to {Gens::Upgrades::%{_dTag}%::1}
+								if {Gens::Upgrades::%{_tTag}%::1} is set:
+									set {_price} to ({Gens::Upgrades::%{_tTag}%::3} + {Gens::Upgrades::%{_dTag}%::3} + {Gens::Upgrades::%{_tag}%::3})
+									format gui slot 14 of player with {Gens::Upgrades::%{_tTag}%::2} named "&e&l%{Gens::Upgrades::%{_tTag}%::1}% &e&lUpgrade &8(&7Triple Upgrade&8)" with lore "&f", "&6&lPrice:", "&6⛁&e%regex({_price})%" and "&f" to close:
+										upgrade("TRIPLE",player,{_tag},{_gLoc},{_bLoc})
+										stop
+							else:
+								genNotifications(event-player, "fail-upgrade-max")         
+						else:
+							genNotifications(event-player, "fail-remove-unowned")
+	else:
+		if {Cooldowns::GenUpgrade::%uuid of player%} is not set:
+			set {Cooldowns::GenUpgrade::%uuid of player%} to now
+		if difference between now and {Cooldowns::GenUpgrade::%uuid of player%} is greater than 1 seconds:
+			set {_bLoc} to location of event-block
+			set {_gLoc} to {_bLoc}
+			add 0.5 to {_gLoc}'s y-coordinate
+			loop all indexes of {Gens::Blocks::*}:
+				if {Gens::Blocks::%loop-value%} is event-block:
+					set {_tag} to loop-value
+					if {Gens::%{_tag}%::*} contains {_gLoc}:
+						if {Gens::%uuid of player%::%loop-value%::*} contains {_gLoc}:
+							if {Gens::Upgrades::%loop-value%::4} is "False":
+								set {Cooldowns::GenUpgrade::%uuid of player%} to now
+								cancel event
+								upgrade("NORMAL",player,{_tag},{_gLoc},{_bLoc})
+								stop
+							else:
+								genNotifications(event-player, "fail-upgrade-max")         
+						else:
+							genNotifications(event-player, "fail-remove-unowned")
+
+# Spawning #
+every 5 seconds:
+	loop all players:
+		loop all indexes of {Gens::%uuid of loop-player%::*}:
+			loop {Gens::%uuid of loop-player%::%loop-value-2%::*}:
+				set {_loc} to loop-value-3
+				if chunk at {_loc} is loaded:
+					remove 0.5 from {_loc}'s y-pos
+					if block at {_loc} is {Gens::Blocks::%loop-value-2%}:
+						drop 1 of {Gens::Drops::%loop-value-2%} at loop-value-3 without velocity
+					else:
+						set {_loc} to loop-value-3
+						remove {_loc} from {Gens::%uuid of loop-player%::%loop-value-2%::*}
+						remove 1 from {GenSlots::%uuid of loop-player%::Used}
+
+
+
+Command /setgens [<offline player>] [<integer>]:
+	permission: *
+	permission message: &cNo!
+	trigger:
+		if arg-1 is not set:
+			send "&aGen &8-  &7You need to specify a player." to player
+		else:
+			if arg-2 is not set:
+				send "&aGen &8-  &7You need to specify a number" to player
+			else:
+				set {GenSlots::%uuid of player%::Max} to arg-2
+				send "&aGenerator &7| Your gen cap has been set to &6%arg-2%&7!" to arg-1
+				send "&aGenerator &7| You set &7%arg-1%&7's &7gen cap to &6%arg-2%&7!" to player
+
+
+
+command /givegen <text>:
+	permission: *
+	trigger:
+		give player {Gens::Items::%arg-1%}
+
+command /addgenslots [<offline player>] [<integer>]:
+	permission: op
+	trigger:
+		add arg-2 to {GenSlots::%uuid of player%::Max}
+		send "&c&lADDED &c%arg-2% &7to &c%arg-1%&7's gen cap which is now &c%{GenSlots::%uuid of player%::Max}%"
+
+
+
+
+		
+
+# Commands #
+command /wipegens <offline player>:
+	permission: ecogens.wipe
+	trigger:
+		loop all indexes of {Gens::%uuid of arg 1%::*}:
+			loop {Gens::%uuid of arg 1%::%loop-value-1%::*}:
+				set {_loc} to loop-value-2
+				remove {_loc} from {Gens::%loop-value-1%::*}
+				remove 0.5 from {_loc}'s y-pos
+				set block at {_loc} to air
+		set {GenSlots::%uuid of arg 1%::Used} to 0
+		set {GenSlots::%uuid of arg 1%::Max} to 25
+		send "&e%arg 1%&7's &aGens %{Gens::%uuid of arg 1%::*}%"
+
+
+
+
+
+ 

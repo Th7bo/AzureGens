@@ -1,0 +1,33 @@
+command /addsell <item> <number>:
+	permission: *
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				set {sell::%arg-1%} to arg-2
+command /listsell:
+	permission: *
+	trigger:
+		loop {sell::*}:
+			send "%loop-index% : %loop-value%"
+
+command /clearsell:
+	permission: *
+	trigger:
+		delete {sell::*}
+		
+
+command /sell:
+	trigger:
+		close player's inventory
+		loop 36 times:
+			set {_num} to loop-number - 1
+			set {_item} to 1 of slot {_num} of player's inventory
+			set {_itema} to item amount of slot {_num} of player's inventory
+			if {sell::%{_item}%} is set:
+				add ({sell::%{_item}%} * {_itema}) to {coins::%player's uuid%}
+				add ({sell::%{_item}%} * {_itema}) to {_total}
+				addXP(player, ({sell::%{_item}%} * {_itema}) * 75)
+				set slot {_num} of player's inventory to air
+		send "&3&lAzure Gens &aYou Earned %{_total}%"
+		send title "&a&lSell" with subtitle "&eEarned %{_total}%" for 0.5 seconds
+		play sound "block.note_block.bell"

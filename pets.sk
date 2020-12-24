@@ -1,0 +1,8 @@
+command /pets:
+	permission: *
+	trigger:
+		wait 1 tick
+		set {openmenu::%player%} to true
+		open virtual chest inventory with size 3 named "Pets" to player
+		format(player, 27)
+		

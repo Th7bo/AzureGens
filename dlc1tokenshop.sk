@@ -1,0 +1,57 @@
+on load:
+	set {tokentalisman} to gold nugget named "&eToken Talisman" with lore "&7 " and "&7Has a chance to give you tokens" and "&7when you kill any mob!" and "&7 "
+
+on right click on entity:
+	if name of entity is "&bRodrick":
+		cancel event
+		open virtual chest inventory with size 3 named "&b&lRodrick's Token Shop" to player
+		format(player,27)
+		format gui slot 12 of player with chainmail boots of feather falling 10 named "&aSlime Boots" with lore "&7 " and "&7Price: 10 Tokens" and "&7 " to run:
+			if {tokens::%player's uuid%} is above 9:
+				remove 10 from {tokens::%player's uuid%}
+				give player chainmail boots of feather falling 10 named "&aSlime Boots" with lore "&7 " and "&7Jump sky high!" and "&7 "
+		format gui slot 13 of player with lime concrete named "&aTurtle Talisman" with lore "&7 " and "&7Makes you super resistant but super weak!" and "&7Price: 15 Tokens" and "&7 " to run:
+			if {tokens::%player's uuid%} is above 14:
+				give player lime concrete named "&aTurtle Talisman" with lore "&7 " and "&7Makes you super resistant but super weak!" and "&7 "
+				remove 15 from {tokens::%player's uuid%}
+		format gui slot 14 of player with gold nugget named "&eToken Talisman" with lore "&7 " and "&7Has a chance to give you tokens" and "&7when you kill any mob!" and "&7Price: 15 Tokens" and "&7 " to run:
+			if {tokens::%player's uuid%} is above 14:
+				give player {tokentalisman}
+				remove 15 from {tokens::%player's uuid%}
+		format gui slot 26 of player with redstone torch named "&c&lInformation" with lore "&7 " and "&7All items in this shop cost tokens, they are useful items" and "&7That give buffs and help with combat!" and "&7 "
+
+
+on death:
+	if attacker is a player:
+		if attacker has {tokentalisman} in their inventory:
+			set {_chance} to random integer between 1 and 200
+			if {_chance} is 1:
+				add 1 to {tokens::%attacker's uuid%}
+				send "&a&lTALISMAN &8&l| &fYou earned &d1 Token &ffrom your Token Talisman!" to attacker
+
+on right click:
+	if colored name of player's tool is "&aTurtle Talisman":
+		cancel event
+		if {turtletalisman::%player's uuid%} is not set:
+			set {turtletalisman::%player's uuid%} to true
+			send "&a&lTALISMAN &8&l| &fYour Turtle Talisman has been ENBALED!"
+		else:
+			delete {turtletalisman::%player's uuid%}
+			send "&a&lTALISMAN &8&l| &fYour Turtle Talisman has been DISABLED!"
+
+
+on place:
+	if colored name of player's tool is "&aTurtle Talisman":
+		cancel event
+
+every 3 seconds:
+	loop all players:
+		if loop-player is wearing chainmail boots of feather falling 10 named "&aSlime Boots":
+			apply jump boost 4 to loop-player for 3 seconds
+		if {turtletalisman::%loop-player's uuid%} is true:
+			if loop-player has lime concrete named "&aTurtle Talisman" with lore "&7 " and "&7Makes you super resistant but super weak!" and "&7 " in their inventory:
+				apply slowness 3 to loop-player for 3 seconds
+				apply resistance 5 to loop-player for 3 seconds
+				apply weakness 2 to loop-player for 3 seconds
+
+

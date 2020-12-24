@@ -1,0 +1,102 @@
+command /blockshop:
+	trigger:
+		wait 1 tick
+		set {openmenu::%player%} to true
+		open virtual chest inventory with size 4 named "Block Shop" to player
+		formatair({_p}, 36)
+		format gui slot 10 of player with brick block named "&e&lDecoration" with lore "&f", "&7Left click to open", "&7The Decoration shop" and "&f" to run function decoration(player)
+		format gui slot 13 of player with red wool named "&e&lColors" with lore "&f", "&7Left click to open", "&7The Colors shop" and "&f" to run function colors(player)
+		format gui slot 31 of player with barrier named "&c&lGo Back" to run player command "/shop"
+
+function colors(p: player): 
+	wait 1 tick
+	set {openmenu::%{_p}%} to true
+	open virtual chest inventory with size 4 named "Colors" to {_p}
+	formatair({_p}, 36)
+	format gui slot 10 of {_p} with blue concrete named "&eConcrete Shop" with lore "&f", "&7Left click to open", "&7The Concrete shop" and "&f" to run function concreteshop({_p})
+	format gui slot 13 of {_p} with gray stained glass named "&eGlass Shop" with lore "&f", "&7Left click to open", "&7The Glass shop" and "&f" to run function glassshop({_p})
+	format gui slot 31 of {_p} with barrier named "&c&lGo Back" to run {_p} command "/blockshop"
+
+function decoration(p: player):
+	wait 1 tick
+	set {openmenu::%{_p}%} to true
+	open virtual chest inventory with size 6 named "Decoration" to {_p}
+	formatair({_p}, 54)
+	format gui slot 0 of {_p} with 32 dirt named "&7x32 &eDirt" with lore "&f", "&6&lPrice:", "&6⛁&e1" and "&f" to run function buy({_p}, 1, 32 dirt)
+	format gui slot 1 of {_p} with 32 oak planks named "&7x32 &eOak Planks" with lore "&f", "&6&lPrice:", "&6⛁&e1.5" and "&f" to run function buy({_p}, 1.5, 32 oak planks)
+	format gui slot 2 of {_p} with 4 oak logs named "&7x4 &eOak Logs" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 4 oak logs)
+	format gui slot 3 of {_p} with 32 dark oak planks named "&7x32 &eDark Oak Planks" with lore "&f", "&6&lPrice:", "&6⛁&e1.5" and "&f" to run function buy({_p}, 1.5, 32 dark oak planks)
+	format gui slot 4 of {_p} with 4 dark oak logs named "&7x4 &eDark Oak Logs" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 4 dark oak logs)
+	format gui slot 5 of {_p} with 32 spruce planks named "&7x32 &eSpruce Planks" with lore "&f", "&6&lPrice:", "&6⛁&e1.5" and "&f" to run function buy({_p}, 1.5, 32 spruce planks)
+	format gui slot 6 of {_p} with 4 spruce logs named "&7x4 &eSpruce Logs" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 4 spruce logs)
+	format gui slot 7 of {_p} with 32 acacia planks named "&7x32 &eAcacia Planks" with lore "&f", "&6&lPrice:", "&6⛁&e1.5" and "&f" to run function buy({_p}, 1.5, 32 acacia planks)
+	format gui slot 8 of {_p} with 4 acacia logs named "&7x4 &eAcacia Logs" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 4 acacia logs)
+	format gui slot 9 of {_p} with 32 acacia planks named "&7x32 &eAcacia Planks" with lore "&f", "&6&lPrice:", "&6⛁&e1.5" and "&f" to run function buy({_p}, 1.5, 32 acacia planks)
+	format gui slot 10 of {_p} with 4 acacia logs named "&7x4 &eAcacia Logs" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 4 acacia logs)
+	format gui slot 11 of {_p} with 32 jungle planks named "&7x32 &eJungle Planks" with lore "&f", "&6&lPrice:", "&6⛁&e1.5" and "&f" to run function buy({_p}, 1.5, 32 jungle planks)
+	format gui slot 12 of {_p} with 4 jungle logs named "&7x4 &eJungle Logs" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 4 jungle logs)
+	format gui slot 13 of {_p} with 32 birch planks named "&7x32 &eBirch Planks" with lore "&f", "&6&lPrice:", "&6⛁&e1.5" and "&f" to run function buy({_p}, 1.5, 32 birch planks)
+	format gui slot 14 of {_p} with 4 birch logs named "&7x4 &eBirch Logs" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 4 birch logs)
+
+	format gui slot 15 of {_p} with 16 cobblestone named "&7x16 &eCobblstone" with lore "&f", "&6&lPrice:", "&6⛁&e3" and "&f" to run function buy({_p}, 3, 16 cobblestone)
+	format gui slot 16 of {_p} with 16 stone bricks named "&7x16 &eStone bricks" with lore "&f", "&6&lPrice:", "&6⛁&e4" and "&f" to run function buy({_p}, 4, 16 stone bricks)
+	format gui slot 17 of {_p} with 16 brick blocks named "&7x16 &eBricks" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 brick blocks)
+	format gui slot 18 of {_p} with 16 sandstone named "&7x16 &eSandStone" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 sandstone)
+	format gui slot 19 of {_p} with 64 grass block named "&7x64 &eGrass Blocks" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 64 Grass Blocks)
+	format gui slot 20 of {_p} with 32 sand named "&7x32 &eSand" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 32 Sand)
+	format gui slot 21 of {_p} with 32 gravel named "&7x32 &eGravel" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 32 Gravel)
+	format gui slot 22 of {_p} with 16 magma block named "&7x16 &eMagma Block" with lore "&f", "&6&lPrice:", "&6⛁&e10" and "&f" to run function buy({_p}, 10, 16 Magma Block)
+	format gui slot 23 of {_p} with 16 soul sand named "&7x16 &eSoul sand" with lore "&f", "&6&lPrice:", "&6⛁&e10" and "&f" to run function buy({_p}, 10, 16 soul sand)
+	format gui slot 24 of {_p} with 32 torch named "&7x32 &eTorches" with lore "&f", "&6&lPrice:", "&6⛁&e0.5" and "&f" to run function buy({_p}, 0.5, 32 Torches)
+	format gui slot 49 of {_p} with barrier named "&c&lGo Back" to run {_p} command "/blockshop"
+	
+
+
+function glassshop(p: player):
+	wait 1 tick
+	set {openmenu::%{_p}%} to true
+	open virtual chest inventory with size 4 named "Glass Shop" to {_p}
+	formatair({_p}, 36)
+	format gui slot 31 of {_p} with barrier named "&c&lGo Back" to run function colors({_p})
+	format gui slot 0 of {_p} with 16 glass named "&7x16 &eGlass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Glass)
+	format gui slot 1 of {_p} with 16 red glass named "&7x16 &eRed Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Red Glass)
+	format gui slot 4 of {_p} with 16 blue glass named "&7x16 &eBlue Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 blue Glass)
+	format gui slot 5 of {_p} with 16 light blue glass named "&7x16 &eLight Blue Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 light blue Glass)
+	format gui slot 6 of {_p} with 16 Cyan glass named "&7x16 &eCyan Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Cyan Glass)
+	format gui slot 3 of {_p} with 16 orange glass named "&7x16 &eOrange Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Orange Glass)
+	format gui slot 7 of {_p} with 16 pink glass named "&7x16 &ePink Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Pink Glass)
+	format gui slot 8 of {_p} with 16 Magenta glass named "&7x16 &eMagenta Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Magenta Glass)
+	format gui slot 9 of {_p} with 16 Purple glass named "&7x16 &ePurple Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Purple Glass)
+	format gui slot 2 of {_p} with 16 yellow glass named "&7x16 &eYellow Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Yellow Glass)
+	format gui slot 10 of {_p} with 16 Lime glass named "&7x16 &eLime Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Lime Glass)
+	format gui slot 11 of {_p} with 16 green glass named "&7x16 &eGreen Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Green Glass)
+	format gui slot 12 of {_p} with 16 brown glass named "&7x16 &eBrown Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Brown Glass)
+	format gui slot 13 of {_p} with 16 light gray glass named "&7x16 &eLight Gray Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Light Gray Glass)
+	format gui slot 14 of {_p} with 16 Gray glass named "&7x16 &eGray Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Gray Glass)
+	format gui slot 15 of {_p} with 16 Black glass named "&7x16 &eBlack Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Black Glass)
+	format gui slot 16 of {_p} with 16 White glass named "&7x16 &eWhite Glass" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 White Glass)
+
+
+function concreteshop(p: player):
+	wait 1 tick
+	set {openmenu::%{_p}%} to true
+	open virtual chest inventory with size 4 named "Concrete Shop" to {_p}
+	formatair({_p}, 36)
+	format gui slot 31 of {_p} with barrier named "&c&lGo Back" to run function colors({_p})
+	format gui slot 0 of {_p} with 16 red Concrete named "&7x16 &eRed Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Red Concrete)
+	format gui slot 1 of {_p} with 16 blue Concrete named "&7x16 &eBlue Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 blue Concrete)
+	format gui slot 2 of {_p} with 16 light blue Concrete named "&7x16 &eLight Blue Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 light blue Concrete)
+	format gui slot 3 of {_p} with 16 Cyan Concrete named "&7x16 &eCyan Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Cyan Concrete)
+	format gui slot 4 of {_p} with 16 orange Concrete named "&7x16 &eOrange Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Orange Concrete)
+	format gui slot 5 of {_p} with 16 pink Concrete named "&7x16 &ePink Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Pink Concrete)
+	format gui slot 6 of {_p} with 16 Magenta Concrete named "&7x16 &eMagenta Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Magenta Concrete)
+	format gui slot 7 of {_p} with 16 Purple Concrete named "&7x16 &ePurple Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Purple Concrete)
+	format gui slot 8 of {_p} with 16 yellow Concrete named "&7x16 &eYellow Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Yellow Concrete)
+	format gui slot 9 of {_p} with 16 Lime Concrete named "&7x16 &eLime Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Lime Concrete)
+	format gui slot 10 of {_p} with 16 green Concrete named "&7x16 &eGreen Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Green Concrete)
+	format gui slot 11 of {_p} with 16 brown Concrete named "&7x16 &eBrown Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Brown Concrete)
+	format gui slot 12 of {_p} with 16 light gray Concrete named "&7x16 &eLight Gray Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Light Gray Concrete)
+	format gui slot 13 of {_p} with 16 Gray Concrete named "&7x16 &eGray Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Gray Concrete)
+	format gui slot 14 of {_p} with 16 Black Concrete named "&7x16 &eBlack Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 Black Concrete)
+	format gui slot 15 of {_p} with 16 White Concrete named "&7x16 &eWhite Concrete" with lore "&f", "&6&lPrice:", "&6⛁&e2.5" and "&f" to run function buy({_p}, 2.5, 16 White Concrete)
+	

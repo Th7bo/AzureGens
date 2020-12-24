@@ -1,0 +1,19 @@
+command /Rankgive [<player>] [<text>]:
+	permission: op
+	trigger:
+		broadcast "%player% just bought a rank!"
+
+on right click:
+	if name of player's tool is "&aMoney Voucher":
+		set {_i} to lore of player's tool
+		if {_i} is not null:
+			send "okay"
+			send "%{_i}%"
+			add {_i} to {coins::%player's uuid%}
+		else:
+			send "not okay"
+
+command /givevoucher [<integer>]:
+	permission: op
+	trigger:
+		give player paper named "&aMoney Voucher" with lore "&7%arg-1%"

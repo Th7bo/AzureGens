@@ -1,0 +1,257 @@
+command /event:
+    permission: op
+    trigger:
+        open virtual chest inventory with size 3 named "&eEvent Inititator!" to player
+        format(player,27)
+        format gui slot 12 of player with gold nugget named "&aLottery!" to run:
+            lottery()
+        format gui slot 13 of player with pumpkin named "&aScavanger Hunt in /spawn!" to run:
+            hunt()
+        format gui slot 14 of player with paper named "&aGuess the number between 1 and 50!" to run:
+            numevent()
+        format gui slot 15 of player with paper named "&aHangman/Guess Word!" to run:
+            guessword()
+        format gui slot 11 of player with feather named "&aJump Event" to run:
+            jumpevent()
+function hunt():
+    broadcast "&f"
+    broadcast "&f"
+    broadcast "    &6&lEvent"
+    broadcast "  &eA Scavenger Hunt event has started. Find the pumpkin in /spawn. You have 5 minutes!"
+    broadcast "&f"
+    broadcast "&f"  
+    set {scavangerevent} to true
+    set {_spawn} to random element out of {pumpkinspawns::*}
+    set block at {_spawn} to pumpkin
+    set {scavangerlocation::%{_spawn}%} to true
+    wait 5 minutes
+    if {scavangerevent} is true:
+        broadcast "&f"
+        broadcast "&f"
+        broadcast "    &6&lEvent"
+        broadcast "  &eA Scavenger Hunt event has ended. No player found the pumpkin!"
+        broadcast "&f"
+        broadcast "&f"  
+        set block at {_spawn} to air
+        delete {scavangerlocation::%{_spawn}%}
+    else:
+        stop
+
+function jumpevent():
+	delete {jumps::*}
+	delete {jumps2::*}
+	broadcast "&f"
+	broadcast "&f"
+	broadcast "    &6&lEvent"
+	broadcast "  &eA Jump Event has started! Whoever Jumps the most within 30 Seconds wins 200 Dollars!"
+	broadcast "&f"
+	broadcast "&f"  
+	set {jumpevent} to true
+	wait 30 seconds
+	set {jumpevent} to false
+	set {_top::*} to sorted {jumps::*} from highest to lowest with format "@index"
+	set {_top2::*} to sorted {jumps2::*} from highest to lowest with format "@index"
+	broadcast "&f"
+	broadcast "&f"
+	broadcast "    &6&lEvent"
+	broadcast "  &eA Jump Event has ended! %{_top::1}% won the event!"
+	broadcast "&f"
+	broadcast "&f"  
+	add 200 to {coins::%{_top2::1}%}
+	
+
+on jump:
+	if {jumpevent} is true:
+		add 1 to {jumps::%player%}
+		add 1 to {jumps2::%player's uuid%}
+
+
+function numevent():
+	broadcast "&f"
+	broadcast "&f"
+	broadcast "    &6&lEvent"
+	broadcast "  &eA Number Event has started! Whoever guess the correct number between 1 and 50 wins 150 dollars!"
+	broadcast "&f"
+	broadcast "&f"  
+	set {winningnumber} to random integer between 1 and 50
+	set {numevent} to true
+	wait 1 minutes
+	if {numevent} is true:
+		broadcast "&f"
+		broadcast "&f"
+		broadcast "    &6&lEvent"
+		broadcast "  &eThe Number Event has ended! Nobody guessed the correct number!"
+		broadcast "&f"
+		broadcast "&f"  
+
+function guessword():
+	set {correctword} to random element out of {hangmanwords::*}
+	set {_f} to first character of {correctword}
+	set {_s} to length of {correctword}	
+	set {guessword} to true
+	broadcast "&f"
+	broadcast "&f"
+	broadcast "    &6&lEvent"
+	broadcast "  &eA Guess The Word Event Has Started! Whoever can guess the correct word with the information given gets 200 coins!"
+	broadcast "  &eWord Size: %{_s}% &7- &eFirst Character Of Word: %{_f}%"
+	broadcast "&f"
+	broadcast "&f"  
+	wait 1 minute
+	if {guessword} is true:
+		broadcast "&f"
+		broadcast "&f"
+		broadcast "    &6&lEvent"
+		broadcast "  &eA Guess The Word Event Has Ended! Nobody guessed the right word!"
+		broadcast "  &eThe word was %{correctword}%!"
+		broadcast "&f"
+		broadcast "&f"
+		set {guessword} to false
+
+on chat:
+	if {guessword} is true:
+		if message is "%{correctword}%":
+			broadcast "&f"
+			broadcast "&f"
+			broadcast "    &6&lEvent"
+			broadcast "  &eA Guess The Word Event Has Ended! %player% guessed the right word and won &6⛁&e200!"
+			broadcast "  &eThe word was %{correctword}%!"
+			broadcast "&f"
+			broadcast "&f"	
+			add 200 to {coins::%player's uuid%}
+			set {guessword} to false
+		
+command /listhangmanword:
+	permission: op
+	trigger:
+		send "%{hangmanwords::*}%"
+
+command /removehangmanword [<text>]:
+	permission: op
+	trigger:
+		remove arg-1 from {hangmanwords::*}
+  
+command /hangmanword:
+	permission: op
+	trigger:
+		set {_word} to random element out of {hangmanwords::*}
+		set {_f} to first character of {_word}
+		set {_s} to length of {_word}
+		send "first character: %{_f}% size: %{_s}%"
+
+command /addhangmanword [<text>]:
+	permission: op
+	trigger:
+		add arg-1 to {hangmanwords::*}
+
+on chat:
+	if {numevent} is true:
+		if message is "%{winningnumber}%":
+			broadcast "&f"
+			broadcast "&f"
+			broadcast "    &6&lEvent"
+			broadcast "  &e%player% guessed the correct number, it was %{winningnumber}%! They earned &6⛁&e150"
+			broadcast "&f"
+			broadcast "&f"  
+			delete {numevent}
+			add 150 to {coins::%player's uuid%}
+			set {chatmuted} to true
+			wait 5 seconds
+			set {chatmuted} to false
+
+on right click on pumpkin:
+	if {scavangerlocation::%location of event-block%} is true:
+		delete {scavangerlocation::%location of event-block%} 
+		delete {scavangerevent}
+		broadcast "&f"
+		broadcast "    &2&lWinner"
+		broadcast "  &a%player%&a has won the scavanger hunt and earned &6⛁&e1000"
+		broadcast "&f"
+		add 1000 to {coins::%player's uuid%}
+		set event-block to air
+
+command /pumpkinlocations:
+	permission: op
+	trigger:
+		send "pump locations: %{pumpkinspawns::*}%"
+
+function lottery():
+    broadcast "&f"
+    broadcast "&f"
+    broadcast "    &6&lEvent"
+    broadcast "  &eA Lottery event has started. Buy tickets using /lotteryticket."
+    broadcast "&f"
+    broadcast "&f"
+    set {lotteryevent} to true
+    set {lotteryprice} to 150
+    wait 3 minutes
+    delete {lotteryevent}
+    set {_winner} to random element out of {lotterytickets::*}
+    broadcast "&f"
+    broadcast "&f"
+    broadcast "    &2&lWinner"
+    broadcast "  &a%{_winner}%&a has won the lottery and earned &6⛁&e%{lotteryprice}%"
+    broadcast "&f"
+    broadcast "&f"
+    set {_pu} to {_winner}'s uuid
+    add {lotteryprice} to {coins::%{_pu}%}
+    delete {lotterytickets::*}
+    delete {lotteryprice}
+
+command /lotteryticket:
+    trigger:
+        if {lotteryevent} is true:
+            open virtual chest inventory with size 1 named "&aLottery Ticket" to player
+            format gui slot 4 of player with emerald named "&aBuy Lottery Ticket" with lore "&f", "&aLottery: &6⛁&e%{lotteryprice}%", "&f", "&6&LPrice:", "&6⛁&e150" and "&f" to run:
+                if {coins::%player's uuid%} >= 150:
+                    remove 150 from {coins::%player's uuid%}
+                    add player to {lotterytickets::*}
+                    add 125 to {lotteryprice}
+                    send "&3&lAzureEvents&a Succsessful Purchase"
+                    play sound "block.note_block.bell"
+                    make player execute "/lotteryticket"
+                else:
+                    send "&3&lAzureEvents &fYou don't have enough coins to purchase a lottery ticket!"
+        else:
+            send "&3&lAzureEvents &fThere is currently no lottery event happening at this moment, come again later!"
+            close player's inventory
+
+every 10 minutes:
+	set {_chance} to random integer between 1 and 3
+	if {_chance} is 1:
+		lottery()
+	if {_chance} is 2:
+		hunt()
+	if {_chance} is 3:
+		jumpevent()
+
+every 5 minutes:
+	set {_chance} to random integer between 1 and 2
+	if {_chance} is 1:
+		numevent()
+	if {_chance} is 2:
+		guessword()
+
+command /randomevent:
+	permission: op
+	trigger:
+		set {_chance} to random integer between 1 and 2
+		if {_chance} is 1:
+			lottery()
+		else:
+			hunt()
+
+command /scavangerwand:
+    permission: op 
+    trigger:
+        set {scavangerwand} to stick named "Svanager Wand"
+        give player {scavangerwand}
+
+command /wipepumpkins:
+	permission: op
+	trigger:
+		delete {pumpkinspawns::*}
+
+on right click on pumpkin:
+    if player's tool is {scavangerwand}:
+        add location of event-block to {pumpkinspawns::*}
+        send "Added %location of event-block% to pumpkin spawn locations!"

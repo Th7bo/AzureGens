@@ -1,0 +1,160 @@
+on join:
+	if {tokens::%player's uuid%} is not set:
+		set {tokens::%player's uuid%} to 0
+
+command /addtoken <offline player> <number>:
+	permission: *
+	trigger:
+		set {_pu} to arg-1's uuid
+		add arg-2 to {tokens::%{_pu}%}
+
+command /withdraw [<text>] [<number>]:
+	trigger:
+		if arg-1 is "coins":
+			if {coins::%player's uuid%} >= arg-2:
+				if arg-2 > 0:
+					set {_i} to shiny sunflower named "&e&lCoin Pouch &8&l| &a%arg-2%" with lore "&7Right click to claim coins"
+					add "{Coins:%arg-2%F}" to nbt of {_i}
+					give player {_i}
+					remove arg-2 from {coins::%player's uuid%}
+		else if arg-1 is "tokens":
+			if {tokens::%player's uuid%} >= arg-2:
+				if arg-2 > 0:
+					set {_i} to shiny Emerald named "&e&lToken Pouch &8&l|&a %arg-2%" with lore "&7Right click to claim Tokens"
+					add "{Tokens:%arg-2%F}" to nbt of {_i}
+					give player {_i}
+					remove arg-2 from {tokens::%player's uuid%}
+		else:
+			send "&3&lAzure Gens &/withdraw <tokens/coins> <amount>"
+			
+
+on right click:
+	if tag "Tokens" of nbt of player's tool is set:
+		set {_n} to tag "Tokens" of nbt of player's tool
+		add {_n} to {tokens::%player's uuid%} 
+		remove 1 from item amount of player's tool
+		send title "&a&lClaimed Pouch" with subtitle "&5◎&d%regex({_n})%"
+	if tag "Coins" of nbt of player's tool is set:
+		set {_n} to tag "Coins" of nbt of player's tool
+		add {_n} to {coins::%player's uuid%} 
+		remove 1 from item amount of player's tool
+		send title "&a&lClaimed Pouch" with subtitle "&6⛁&e%regex({_n})%"
+
+function buyt(p: player, c: number, i: item):
+	set {_pu} to {_p}'s uuid
+	if {tokens::%{_pu}%} >= {_c}:
+		give {_i} to {_p}
+		remove {_c} from {tokens::%{_pu}%}
+		send "&3&LAzure Shop&a Successful Purchase" to {_p}
+		play sound "block.note_block.bell" to {_p}
+	else:
+		play sound "block.note_block.didgeridoo" to {_p}
+		send "&3&lAzure Shop&c Insufficient Funds" to {_p}
+
+command /tokenshop:
+	trigger:
+		wait 1 tick
+		set {openmenu::%player%} to true
+		set {_sellwand1} to shiny blaze rod named "&eSell Wand (&ex1.0)" with lore "&7Right Click a container to sell."
+		add "{Sellwand:1F}" to nbt of {_sellwand1}
+		set {_sellwand15} to shiny blaze rod named "&eSell Wand (&ex1.5)" with lore "&7Right Click a container to sell."
+		add "{Sellwand:1.5F}" to nbt of {_sellwand15}
+		set {_sellwand2} to shiny blaze rod named "&eSell Wand (&ex2.0)" with lore "&7Right Click a container to sell."
+		add "{Sellwand:2F}" to nbt of {_sellwand2}
+		open virtual chest inventory with size 5 named "Token Shop" to player
+		format(player, 5 * 9)
+		format gui slot 10 of player with shiny blaze rod named "&eSell Wand (x1.0)" with lore "&f", "&6&lPrice:", "&5◎&d5" and "&f" to run function buyt(player,5,{_sellwand1})
+		format gui slot 12 of player with shiny blaze rod named "&eSell Wand (x1.5)" with lore "&f", "&6&lPrice:", "&5◎&d10" and "&f" to run function buyt(player,10,{_sellwand15})
+		format gui slot 14 of player with shiny blaze rod named "&eSell Wand (x2.0)" with lore "&f", "&6&lPrice:", "&5◎&d20" and "&f" to run function buyt(player,20,{_sellwand2})
+		format gui slot 16 of player with iron block named "&e+1 Gen Slot &7(Max %{GenSlots::%uuid of player%::BuyMax}% GenSlots)" with lore "&f", "&6&lPrice:", "&5◎&d1" and "&f" to run:
+			if {tokens::%player's uuid%} >= 1:
+				if {GenSlots::%uuid of player%::Max} <= ({GenSlots::%uuid of player%::BuyMax} - 1):
+					add 1 to {GenSlots::%uuid of player%::Max}
+					remove 1 from {tokens::%player's uuid%}
+					send "&3&LAzure Shop&a Successful Purchase"
+					play sound "block.note_block.bell"
+				else:
+					play sound "block.note_block.didgeridoo"
+					send "&3&lAzure Shop&c Max %{GenSlots::%uuid of player%::BuyMax}% Gen Slots"				
+			else:
+				play sound "block.note_block.didgeridoo"
+				send "&3&lAzure Shop&c Insufficient Funds"	
+		format gui slot 29 of player with name tag named "&3&LAzure Ranks" with lore "&f", "&7Left click here to", "&7open Rank Shop." and "&f" to run player command "/ranks"
+
+command /ranks:
+	trigger:
+		wait 1 tick
+		set {openmenu::%player%} to true
+		open virtual chest inventory with size 3 named "Ranks" to player
+		format(player,27)
+		format gui slot 11 of player with shiny paper named "&a&LVIP &arank" with lore "&f", "&3&LFeatures:" , "&7+10 Max Buying Gens Slots." , "&7+10 Gen Slots" , "&73 Plots", "&7/Keyall every 48h", "&7/Nick" ,"&f", "&6&LPrice:", "&5◎&d110" and "&f" to close:
+			if player's group is not "vip", "pro" or "premium":
+				if {tokens::%player's uuid%} >= 110:
+					set {GenSlots::%uuid of player%::BuyMax} to 60
+					add 10 to {GenSlots::%uuid of player%::Max}
+					remove 110 from {tokens::%player's uuid%}
+					execute console command "/pex user %player% group add vip"
+					send "&3&LAzure Shop&a Successful Purchase"
+					play sound "block.note_block.bell"
+				else:
+					play sound "block.note_block.didgeridoo"
+					send "&3&lAzure Shop&c Insufficient Funds"
+			else:
+				play sound "block.note_block.didgeridoo"
+				send "&3&lAzure Shop&c Already Have a Rank"
+		if player's group is not "vip":
+			format gui slot 13 of player with shiny paper named "&3&LPRO &3rank" with lore "&f", "&3&LFeatures:" , "&7+25 Max Buying Gens Slots." , "&7+25 Gen Slots"  , "&75 Plots", "&7/Keyall every 24h", "&7/Potions", "&7/Nick Colored" ,"&f", "&6&LPrice:", "&5◎&d210" and "&f" to close:
+				if player's group is not "pro" or "premium":
+					if {tokens::%player's uuid%} >= 210:
+						set {GenSlots::%uuid of player%::BuyMax} to 75
+						add 25 to {GenSlots::%uuid of player%::Max}
+						remove 210 from {tokens::%player's uuid%}
+						execute console command "/pex user %player% group add pro"
+						send "&3&LAzure Shop&a Successful Purchase"
+						play sound "block.note_block.bell"
+					else:
+						play sound "block.note_block.didgeridoo"
+						send "&3&lAzure Shop&c Insufficient Funds"
+				else:
+					play sound "block.note_block.didgeridoo"
+					send "&3&lAzure Shop&c Already Have a Rank"
+		else:
+			format gui slot 13 of player with shiny paper named "&3&LPRO &3rank upgrade" with lore "&f", "&3&LFeatures:" , "&7+25 Max Buying Gens Slots." , "&7+25 Gen Slots"  , "&75 Plots", "&7/Keyall every 24h", "&7/Potions", "&7/Nick Colored" ,"&f", "&6&LPrice:", "&5◎&d100" and "&f" to close:
+				if {tokens::%player's uuid%} >= 100:
+					set {GenSlots::%uuid of player%::BuyMax} to 75
+					add 15 to {GenSlots::%uuid of player%::Max}
+					remove 100 from {tokens::%player's uuid%}
+					execute console command "/pex user %player% group set pro"
+					send "&3&LAzure Shop&a Successful Purchase"
+					play sound "block.note_block.bell"
+				else:
+					play sound "block.note_block.didgeridoo"
+					send "&3&lAzure Shop&c Insufficient Funds"
+		if player's group is not "pro":
+			format gui slot 15 of player with shiny paper named "&6&lPREMIUM &6rank" with lore "&f", "&3&LFeatures:" , "&7+50 Max Buying Gens Slots." , "&7+50 Gen Slots" , "&710 Plots", "&7/Keyall every 12h", "&7/Flyspeed", "&7More /Potions", "&7/Nick Colored" ,"&f", "&6&LPrice:", "&5◎&d510" and "&f" to close:
+				if player's group is not "premium":
+					if {tokens::%player's uuid%} >= 510:
+						set {GenSlots::%uuid of player%::BuyMax} to 100
+						add 50 to {GenSlots::%uuid of player%::Max}
+						remove 510 from {tokens::%player's uuid%}
+						execute console command "/pex user %player% group add premium"
+						send "&3&LAzure Shop&a Successful Purchase"
+						play sound "block.note_block.bell"
+					else:
+						play sound "block.note_block.didgeridoo"
+						send "&3&lAzure Shop&c Insufficient Funds"
+				else:
+					play sound "block.note_block.didgeridoo"
+					send "&3&lAzure Shop&c Already Have a Rank"
+		else:
+			format gui slot 15 of player with shiny paper named "&6&lPREMIUM &6rank Upgrade" with lore "&f", "&3&LFeatures:" , "&7+50 Max Buying Gens Slots." , "&7+50 Gen Slots" , "&710 Plots", "&7/Keyall every 12h", "&7/Flyspeed", "&7More /Potions", "&7/Nick Colored" ,"&f", "&6&LPrice:", "&5◎&d300" and "&f" to close:
+				if {tokens::%player's uuid%} >= 300:
+					set {GenSlots::%uuid of player%::BuyMax} to 100
+					add 50 to {GenSlots::%uuid of player%::Max}
+					remove 300 from {tokens::%player's uuid%}
+					execute console command "/pex user %player% group set premium"
+					send "&3&LAzure Shop&a Successful Purchase"
+					play sound "block.note_block.bell"
+				else:
+					play sound "block.note_block.didgeridoo"
+					send "&3&lAzure Shop&c Insufficient Funds"			

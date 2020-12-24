@@ -1,0 +1,88 @@
+#
+#Skill First Join
+#
+on join:
+	if {skills::%player's uuid%::COMBAT::level} is not set:
+		set {skills::%player's uuid%::COMBAT::level} to 1
+		set {skills::%player's uuid%::COMBAT::xp} to 0
+	if {skills::%player's uuid%::FISHING::level} is not set:
+		set {skills::%player's uuid%::FISHING::level} to 1
+		set {skills::%player's uuid%::FISHING::xp} to 0
+	if {skills::%player's uuid%::LOGGING::level} is not set:
+		set {skills::%player's uuid%::LOGGING::level} to 1
+		set {skills::%player's uuid%::LOGGING::xp} to 0
+
+#
+#Skill Gui
+#
+command /skills:
+	trigger:
+		wait 1 tick
+		set {openmenu::%player%} to true
+		open virtual chest inventory with size 3 named "Skills" to player
+		format(player,27)
+
+        #
+        #Fishing Skill
+        #
+		set {_text} to ""
+		set {_perc} to ({skills::%player's uuid%::FISHING::xp} / (({skills::%player's uuid%::FISHING::level} * 105) * (1.41 + ({skills::%player's uuid%::FISHING::level} * 0.1))) ) * 100
+		loop ({_perc} / 5) times:
+			set {_text} to "%{_text}%&a&l|"
+
+		loop ((100 - {_perc}) / 5) times:
+			set {_text} to "%{_text}%&7&l|"
+			
+		format gui slot 13 of player with Fishing Rod named "&b&lFishing Skill" with lore "&f", "&7Progress to level &a%{skills::%player's uuid%::FISHING::level} + 1%&7:", "&8&L[ %{_text}% &8&L]"
+        
+        #
+        #Combat Skill
+        #
+		set {_text} to ""
+		set {_perc} to ({skills::%player's uuid%::COMBAT::xp} / (({skills::%player's uuid%::COMBAT::level} * 105) * (1.41 + ({skills::%player's uuid%::COMBAT::level} * 0.1))) ) * 100
+		loop ({_perc} / 5) times:
+			set {_text} to "%{_text}%&a&l|"
+
+		loop ((100 - {_perc}) / 5) times:
+			set {_text} to "%{_text}%&7&l|"
+		
+
+		format gui slot 12 of player with Diamond Sword with no nbt named "&3&lCombat Skill" with lore "&f", "&7Progress to level &a%{skills::%player's uuid%::COMBAT::level} + 1%&7:", "&8&L[ %{_text}% &8&L]"
+
+        #
+        #Logging Skill
+        #
+		set {_text} to ""
+		set {_perc} to ({skills::%player's uuid%::LOGGING::xp} / (({skills::%player's uuid%::LOGGING::level} * 105) * (1.41 + ({skills::%player's uuid%::LOGGING::level} * 0.1))) ) * 100
+		loop ({_perc} / 5) times:
+			set {_text} to "%{_text}%&a&l|"
+
+		loop ((100 - {_perc}) / 5) times:
+			set {_text} to "%{_text}%&7&l|"
+			
+		format gui slot 14 of player with Iron Axe with no nbt named "&6&lLogging Skill" with lore "&f", "&7Progress to level &a%{skills::%player's uuid%::LOGGING::level} + 1%&7:", "&8&L[ %{_text}% &8&L]"
+		
+
+#
+# XP and Level Up Handler
+#
+function addSkillXP(num: number ,p: player, type: text):
+	set {_pu} to {_p}'s uuid
+	if ({skills::%{_pu}%::%{_type}%::xp} + {_num}) >= ({skills::%{_pu}%::%{_type}%::level} * 105) * (1.41 + ({skills::%{_pu}%::%{_type}%::level} * 0.1)):
+		set {skills::%{_pu}%::%{_type}%::xp} to 0
+		add 1 to {skills::%{_pu}%::%{_type}%::level}
+		send action bar with text "&3Level %{skills::%{_pu}%::%{_type}%::level}%&3 in %{_type}%&3 Skill." to {_p}
+		play sound "entity.player.levelup" with volume 0.5 and pitch 2 to {_p} at {_p}
+	else:
+		add {_num} to {skills::%{_pu}%::%{_type}%::xp}
+		send action bar with text "&3Gained %{_num}%&3 %{_type}%&3 Xp" to {_p}
+		play sound "entity.experience_orb.pickup" with volume 0.5 and pitch 2 to {_p} at {_p}
+
+#
+#Testing Commands
+#
+command /testskill:
+	permission: *
+	trigger:
+		addSkillXP(10, player, "FISHING")
+		

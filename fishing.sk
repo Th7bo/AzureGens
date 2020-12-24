@@ -1,0 +1,19 @@
+on load:
+	set {FishingLoot::Fishes::*}
+	set {FishingLoot::Junk::*}
+	set {FishingLoot::Treasure::*}
+
+
+on fishing:
+	if "%fishing state%" is "CAUGHT_FISH":
+		set {_loot} to random integer between 0 and 100
+
+		#Fishes
+		if {_loot} is between 1 and 53:
+
+		#Junk
+		if {_loot} is between 54 and 83:
+
+		#Treasure
+		if {_loot} is between 84 and 100:
+			addSkill

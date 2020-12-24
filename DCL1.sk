@@ -1,0 +1,234 @@
+on load:
+	#
+	#Zombie Talisamn Coin Give
+	#
+	set {zombT::Coin::*} to 2, 6, 12, 16, 18, 24, 28, 40, 55 and 75
+
+	#
+	#Zombie Talisman Price
+	#
+	set {zombT::Price::*} to 75, 100, 150, 250, 350, 500, 1000, 1500 and 2500
+
+	#
+	#Zombie Talisman Items
+	#
+	loop size of {zombT::Coin::*} times:
+		set {zombT::%loop-number%} to sunflower named "&aZombie Talisman &8&l| &6Tier %loop-number%" with lore "&7", "&7Converts zombies into coins.", "&f", "&6⛁&e%{zombT::Coin::%loop-number%}%&7 per kill." and "&f"
+		add "{zombT:%loop-number%}" to nbt of {zombT::%loop-number%}
+
+on flight toggle:
+	player does not have permission "admin.fly"
+	if player's world is "DLC1":
+		set flight mode of player to false
+
+on burn:
+	cancel event
+
+on place:
+	if name of player's tool contains "&aZombie Talisman":
+		cancel event
+
+function setZombSpawn(p: player):
+	add location of {_p} to {zombiespawn::*}
+
+on death of zombie:
+	clear the drops
+
+on break:
+	if player's world is "DLC1":
+		if player's gamemode is survival:
+			cancel event
+on place:
+	if player's world is "DLC1":
+		if player's gamemode is survival:
+			cancel event
+
+
+function spawnZombie():
+	if {aetherzombies} < (size of {zombiespawn::*}):
+		loop {zombiespawn::*}:
+			if {aetherzombies} < size of ({zombiespawn::*}):
+				chance of 75%:
+					add 1 to {aetherzombies}
+					spawn 1 zombie at {zombiespawn::%loop-index%}
+					set name of last spawned entity to "&2Zombie &8&l| &7Level 1"
+					set max health of last spawned entity to 25
+					heal last spawned entity
+			else:
+				stop
+
+on death:
+	if name of victim is "&2Zombie &8&l| &7Level 1":
+		remove 1 from {aetherzombies}
+
+every 30 seconds:
+	spawnZombie()
+
+
+on place anvil:
+	cancel event
+
+on right click on entity:
+	name of entity is "&bDaniel"
+	cancel event
+	if {aetherpass1::%player's uuid%} is not set:
+		open virtual chest inventory with size 5 named "Aether" to player
+		format(player,5 * 9)
+		format gui slot 0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,37,38,39,40,41,42,43 and 44 of player with cyan stained glass pane named "&f"
+		format gui slot 22 of player with anvil named "&b&lBuy Aether Pass" with lore "&7 " and "&7Used to tp to AETHER!", "&f", "&6&LPrice:", "&6⛁&e150" and "&7 " to close:
+			if {coins::%player's uuid%} is above 149:
+				remove 150 from {coins::%player's uuid%}
+				set {aetherpass1::%player's uuid%} to "work"
+				cutscene(player)
+		format gui slot 40 of player with redstone torch named "&c&lInformation" with lore "&7 " and "&7Aether is a place where you can kill mobs for coins," and "&7buy special items, explore, and much more soon!" and "&7 "
+	if {aetherpass1::%player's uuid%} is "work":
+		open virtual chest inventory with size 5 named "Aether" to player
+		format(player,5 * 9)
+		format gui slot 0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,37,38,39,40,41,42,43 and 44 of player with cyan stained glass pane named "&f"
+		format gui slot 40 of player with redstone torch named "&c&lInformation" with lore "&7 " and "&7Aether is a place where you can kill mobs for coins," and "&7buy special items, explore, and much more soon!" and "&7 "
+		format gui slot 22 of player with ender pearl named "&d&lWarp To Aether" with lore "&7 " and "&7Click to warp to Aether!" and "&7 " to run:
+			teleport player to {aetherspawn}
+
+on damage:
+	if victim is villager:
+		if attacker is player or zombie:
+			cancel event
+
+
+on right click:
+	if tag "zombT" of nbt of player's tool is set:
+		set {_num} to tag "zombT" of nbt of player's tool
+		set {_num1} to {_num} + 1
+		set {_num2} to {_num} - 1
+		if {zombT::%{_num1}%} is set:
+			open virtual chest inventory with size 5 named "Upgrade" to player
+			format(player,5 * 9)
+			format gui slot 0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,37,38,39,40,41,42,43 and 44 of player with lime stained glass pane named "&f"
+			format gui slot 22 of player with sunflower named "&aZombie Talisman &8&L| &6Tier %{_num} + 1%" with lore "&f", "&6&lPrice:", "&6⛁&e%{zombT::Price::%{_num}%}%", "&f", "&6⛁&e%{zombT::Coin::%{_num1}%}%&7 per kill." and "&f" to close:
+				if player's tool is {zombT::%{_num}%}:
+					if {coins::%player's uuid%} >= {zombT::Price::%{_num}%}:
+						remove {zombT::Price::%{_num}%} from {coins::%player's uuid%}
+						set player's tool to {zombT::%{_num1}%}
+						send title "&a&LTalisman Upgrade" with subtitle "&7Talisman Tier %{_num1}%" to player for 1 second with fade in 0.5 seconds and fade out 1 seconds
+						play sound "BLOCK_NOTE_BLOCK_CHIME" at volume 1 with pitch 3 for player
+					else:
+						send action bar with text "&c&LInsufficient funds" to player
+						play sound "BLOCK_NOTE_BLOCK_BASS" at volume 1 with pitch 3 for player	
+				else:
+					send action bar with text "&c&LItem is not in main hand" to player
+					play sound "BLOCK_NOTE_BLOCK_BASS" at volume 1 with pitch 3 for player					
+		else:
+			send action bar "&c&LMax Level" to player
+			play sound "BLOCK_NOTE_BLOCK_BASS" at volume 1 with pitch 3 for player
+
+on death of zombie:
+	if attacker is a player:
+		clear drops
+		loop size of {zombT::Coin::*} times:
+			set {_num} to size of {zombT::Coin::*} - (loop-number - 1)
+			if attacker has {zombT::%{_num}%} in their inventory:
+				add {zombT::Coin::%{_num}%} to {coins::%attacker's uuid%}
+				wait 10 ticks
+				send action bar "&e+&6⛁&e%{zombT::Coin::%{_num}%}%" to attacker
+				play sound "block.chain.break" at volume 1 with pitch 1.5 to attacker at attacker
+				wait 1 second
+				addSkillXP(5, attacker, "Combat")
+				stop
+
+on right click on entity:
+	if name of entity is "&bAether Shop":
+		set {_entity} to entity
+		cancel event
+		open virtual chest inventory with size 5 named "&b&lAether Shop" to player 
+		format(player,5 * 9)
+		format gui slot 0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,37,38,39,40,41,42,43 and 44 of player with lime stained glass pane named "&f"
+		if player is op:
+			format gui slot 40 of player with red wool named "&cDelete NPC" to run:
+				kill {_entity}
+				send "&cNpc Deleted!"
+		format gui slot 22 of player with sunflower named "&aZombie Talisman &8&l| &6Tier 1" with lore "&7 " and "&7Converts zombies into coins!", "&f", "&6&lPrice:", "&6⛁&e250" and "&7 " to run:
+			if {coins::%player's uuid%} is above 249:
+				give player {zombT::1}
+				remove 250 from {coins::%player's uuid%}
+				
+
+on damage:
+	if name of victim is "&bAether Shop":
+		cancel event
+
+on damage:
+	if name of attacker is "&2Zombie &8&l| &7Level 1":
+		if victim is player:
+			set {_chance} to random integer between 1 and 10
+			if {_chance} is 1 or 2:
+				push victim in direction of attacker at speed 6
+				push victim up at speed 1
+				wait 5 ticks
+				push victim down at speed 8
+				send title "&b&lWOOSH!" to victim for 1 second with fade in 0.5 seconds and fade out 1 seconds
+				play sound "minecraft:entity.wither.shoot" with volume 1 and pitch 0.6 to victim at victim
+			if {_chance} is 3 or 4 or 5:
+				apply strength of tier 3 to attacker for 3 seconds
+				play sound "block.anvil.use" with volume 1 and pitch 0.7 to attacker at attacker
+
+
+function cutscene(p: player):
+	hide all players from {_p}
+	teleport {_p} to {cutscenepos1}
+	set {move::%{_p}%} to false
+	send title "&3&lAzureGens" with subtitle "&7Presents" to {_p} for 3 seconds
+	wait 3 seconds
+	teleport {_p} to {cutscenepos2}
+	send title "&3&lAn AzureGens" with subtitle "&7Update" to {_p} for 3 seconds
+	wait 3 seconds
+	teleport {_p} to {cutscenepos3}
+	send title "&b&lThe Aether" with subtitle "&7Update" to {_p} for 3 seconds
+	wait 3 seconds
+	teleport {_p} to {cutscenepos4} 
+	send "&e[NPC] Daniel: &fI've always hated life down here. Its boring, uninteresting." to {_p}
+	PLAY SOUND "entity.villager.ambient" at location of {_p} for {_p}
+	wait 3 seconds
+	send "&e[NPC] Daniel: &fHowever, I think I have found a way to leave." to {_p}
+	PLAY SOUND "entity.villager.ambient" at location of {_p} for {_p}
+	wait 3 seconds
+	send "&e[NPC] Daniel: &fA way to go above the clouds!" to {_p}
+	PLAY SOUND "entity.villager.celebrate" at location of {_p} for {_p}
+	wait 3 seconds
+	apply levitation 100 to {_p} for 10 seconds
+	delete {move::%{_p}%}
+	reveal all players to {_p}
+	wait 10 seconds
+	teleport {_p} to {aetherspawn}
+	send "&aYou can talk to the &a&lAether Shop &afor the Zombie Talisman!" to {_p}
+	send "&aThe Zombie Talisman is an item you can upgrade" to {_p}
+	send "&aThe Zombie Talisman gives you more and more coins dependent on its level" to {_p}
+
+on load:
+	delete {move::*}
+
+function villager(p: player,n: text):
+	spawn villager at {_p}'s location
+	set name of last spawned entity to colored {_n}
+	add "{NoAI:1}" to nbt of last spawned entity
+		
+
+on walk on barrier:
+	if {move::%player%} is set:
+		cancel event
+
+on jump:
+	if {move::%player%} is set:
+		cancel event
+
+on place:
+	if player's world is "DLC1":
+		if player's gamemode is survival:
+			cancel event
+on break:
+	if player's world is "DLC1":
+		if player's gamemode is survival:
+			cancel event
+on drop:
+	if player's world is "DLC1":
+		if player's gamemode is survival:
+			cancel event

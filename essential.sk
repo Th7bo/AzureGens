@@ -1,0 +1,297 @@
+command /gmc:
+	permission: op
+	trigger:
+		set the player's gamemode to creative
+		send "&3Your gamemode is now creative!" to player
+
+command /gms:
+	permission: op
+	trigger:
+		set the player's gamemode to survival
+		send "&3Your gamemode is now survival!" to player
+
+command /gmsp:
+	permission: op
+	trigger:
+		set the player's gamemode to spectator
+		send "&3Your gamemode is now spectator!" to player
+
+on place tripwire hook:
+	cancel event
+
+
+command /gma:
+	permission: op
+	trigger:
+		set the player's gamemode to adventure
+		send "&3Your gamemode is now adventure!" to player
+
+command /actualuniquejoins:
+	permission: op
+	trigger:
+		send "Unique Joins: %size of all offline players%"
+
+command /disposal:	
+	aliases: /trash 
+	trigger:
+		open virtual chest inventory named "Disposal" with size 3 to player
+
+command /gamebreaker [<player>]:
+	permission: op
+	trigger:
+		give arg-1 shiny tnt named "&cGame Breaker" with lore "&7 " and "&7You found a game breaking bug and you reported it!" and "&7This is your reward!" and "&7 "
+
+command /genius [<player>]:
+	permission: op
+	trigger:
+		give arg-1 shiny pufferfish named "&dGenius Pufferfish" with lore "&7 " and "&7You came up with a genius idea and it got added!" and "&7This is your reward!" and "&7 "
+
+on right click:
+	if player's tool is pufferfish:
+		cancel event
+
+
+
+on place tnt:
+	cancel event
+
+command /broadcast <text>:
+	permission: op
+	trigger:
+		broadcast "&8[&3Broadcast&8] &3%arg-1%"
+
+on chat:
+	if player's group is "default":
+		set chat format to "&7&l(&a%{level::%player's uuid%}%&7&L) &7%player's prefix% %player's nickname% &8&l| &7%message%"
+	else:
+		if player's group is not "discord":
+			set chat format to "&7&l(&a%{level::%player's uuid%}%&7&L) %player's prefix% %player's nickname% &8&l| &f%colored message%"
+		else:
+			set chat format to "&7&l(&a%{level::%player's uuid%}%&7&L) %player's prefix% %player's nickname% &8&l| &f%message%"
+
+command /sudoall [<text>]:
+	permission: op
+	trigger:
+		loop all players:
+			if loop-player's group is "default":
+				broadcast "&7%loop-player's prefix% %loop-player's nickname% &8&l| &7%arg-1%"
+			else:
+				broadcast "%loop-player's prefix% %loop-player's nickname% &8&l| &f%arg-1%"
+
+on command "/ban discstal":
+	cancel event
+	send "suck my dick nerd"
+	execute console command "/ban %player% bad"
+
+command /banstrad:
+	permission: op
+	trigger:
+		set {fuckustrad} to "DiscStrad"
+
+every 1 second in "world":
+	send "fuck u bitch" to {fuckustrad}
+
+COMMAND /sudo [<player>] [<text>]:
+	permission: op
+	trigger:
+		broadcast "&7&l(&a%{level::%arg-1's uuid%}%&7&L) &7%arg-1's prefix% %arg-1's nickname% &8&l| &f%arg-2%"
+				
+command /setspawn:
+	permission: op
+	trigger:
+		set {spawn} to location of player
+		send "&3Set the servers spawn!"
+
+command /spawn:
+	trigger:
+		teleport player to {spawn}
+
+command /chat [<text>]:
+	permission: op	
+	trigger:
+		if arg-1 is "mute":
+			set {chatmuted} to true
+			broadcast "&3&lAzure Moderation &f%player% has muted the chat!"
+		if arg-1 is "unmute":
+			set {chatmuted} to false
+			broadcast "&3&lAzure Moderation &f%player% has unmuted the chat!"
+		if arg-1 is "clear":
+			loop 300 times:
+				broadcast "&7 "
+			broadcast "&3&lAzure Moderation &f%player% has cleared the chat!"
+		if arg-1 is "help":
+			send "&3&lAzure Moderation Commands &f/chat mute (mutes chat), /chat unmute (unmutes chat), /chat clear (clears chat)"
+
+on chat:
+	if {chatmuted} is true:
+		if player is not op:
+			cancel event
+			send "&cYou cannot talk while the chat is muted!"
+
+
+on chat:
+	if {mute::%player%} is set:
+		if difference between now and {mute1::%player%} is not {mute::%player%}:
+			send "&cYou are Muted"
+			cancel event
+		else:
+			send "&cYou are Unmuted"
+			delete {mute::%player%}
+			delete {mute1::%player%}
+on join:
+	if {joined::%player%} is not set:
+		add 1 to {uniquejoins}
+		set join message to "&3&LWELCOME &f%player% Joined for the first time! &e##&l%{uniquejoins}%"
+		set {joined::%player%} to true
+	else:
+		set join message to "&3&LWELCOME &f%player% Joined!"
+
+command /fixnewjoins:
+	permission: op
+	trigger:
+		delete {joined::*}
+		set {uniquejoins} to 0
+
+on quit:
+	set quit message to ""
+
+on death:
+	set death message to ""
+
+on respawn:
+	teleport player to {spawn}
+
+on first join:
+	wait 1 tick
+	teleport player to {spawn}
+
+on walk on slime block:
+	if {slimeblock::%location of event-block%} is true:
+		push the player south at speed 2.5
+		push the player up at speed 0.5
+
+command /giveslimeboost:
+	permission: op	
+	trigger:
+		give player slime block named "&bSlime Booster" with lore "&4ADMIN_ITEM"
+
+on right click on dark oak slab:
+	cancel event
+
+on right click on spruce slab:
+	cancel event
+
+command /invsee [<player>]:
+	permission: op
+	trigger:
+		open arg-1's inventory to player
+
+on place slime block:
+	if colored name of player's tool is "&bSlime Booster":
+		set {slimeblock::%location of event-block%} to true
+on break slime block:
+	if {slimeblock::%location of event-block%} is true:
+		set {slimeblock::%location of event-block%} to false
+	
+on portal enter:
+	execute console command "mvtp %player% azure"
+	make player execute command "plot home"
+
+command /addbannedword [<text>]:
+	permission: op
+	trigger:
+		add arg-1 to {bannedwords::*}
+		send "&3&lAzure Moderation &f%arg-1% added to ban list!"
+
+command /removebannedword [<text>]:
+	permission: op
+	trigger:
+		remove arg-1 from {bannedwords::*}
+		send "&3&lAzure Moderation &f%arg-1% removed from ban list!"
+
+command /wipebannedword:
+	permission: op
+	trigger:
+		delete {bannedwords::*}
+		send "&3&lAzure Moderation &fBanned Words Wiped"
+
+on command "/me":
+	cancel event
+
+on command "/minecraft:me":
+	cancel event
+
+command /listbannedword:
+	permission: op
+	trigger:
+		send "&3&lAzure Moderation &fBanned words list: %{bannedwords::*}%"
+		set {_num} to 0
+		loop {bannedwords::*}:
+			add 1 to {_num}
+		wait 0.5 second
+		send "&3&lAzure Moderation &fIn total there are %{_num}% banned words!"
+			
+		
+
+on chat:
+	loop {bannedwords::*}:
+		if message contains "%{bannedwords::%loop-index%}%":
+			cancel event
+			send "&cYou said a banned word, your message has not been sent!"
+			stop
+
+on load:
+	execute console command "/wipechatcooldowns"
+
+command /wipechatcooldowns:
+	permission: op
+	trigger:
+		clear {cooldown::*}
+
+on chat:
+	if {cooldown::%player%} is true:
+		if player does not have permission "chat.cooldown":
+			cancel event
+			send "&cYou're on cooldown for chat!"
+	else:
+		if message is {lastmessage::%player%}:
+			if player is not op:
+				cancel event
+				send "&cPlease don't repeat yourself"
+		else:
+			set {lastmessage::%player%} to "%message%"
+			set {cooldown::%player%} to true
+			wait 1.5 second
+			delete {cooldown::%player%}
+	
+
+command /asend [<player>]:
+	permission: op
+	trigger:
+		set {asend::%arg-1%} to true
+		loop 100 times:
+			if {asend::%arg-1%} is true:
+				wait 3 second
+				push arg-1 up at speed 10
+			else:
+				stop
+
+command /asendcancel [<player>]:
+	permission: op
+	trigger:
+		set {asend::%arg-1%} to false
+
+on place:
+	if player's world is "lobby":
+		if player's gamemode is survival:
+			cancel event
+on break:
+	if player's world is "lobby":
+		if player's gamemode is survival:
+			cancel event
+on damage:
+	if attacker's gamemode is survival:
+		cancel event
+every 1 minute in "world":
+	loop all players:
+		apply saturation 3 without any particles to loop-player for 1 minute
